@@ -1,0 +1,134 @@
+{
+  "scan_telemetry": {
+    "total_files": 64,
+    "native_scan_ms": 1703.2,
+    "scan_with_conditional_ocr_ms": 80325.85,
+    "ocr_triggered_files": 13
+  },
+  "results": [
+    {
+      "configuration": "Config A: DropIt-Style (Metadata + Filename Regex Only)",
+      "evaluated_files": 64,
+      "accuracy_pct": 67.19,
+      "macro_precision_pct": 80.48,
+      "macro_recall_pct": 68.38,
+      "macro_f1_pct": 66.78,
+      "duplicate_precision_pct": 100.0,
+      "duplicate_recall_pct": 100.0,
+      "classify_time_ms": 2.759,
+      "peak_ram_mb": 0.021,
+      "manual_review_rate_pct": 46.88,
+      "tie_conflicts": 3
+    },
+    {
+      "configuration": "Config B: Strategy 01 (Native Parsing + Rules, No OCR)",
+      "evaluated_files": 64,
+      "accuracy_pct": 73.44,
+      "macro_precision_pct": 74.37,
+      "macro_recall_pct": 70.29,
+      "macro_f1_pct": 66.72,
+      "duplicate_precision_pct": 100.0,
+      "duplicate_recall_pct": 100.0,
+      "classify_time_ms": 3.53,
+      "peak_ram_mb": 0.033,
+      "manual_review_rate_pct": 37.5,
+      "tie_conflicts": 4
+    },
+    {
+      "configuration": "Config C: Strategy 01 (Native Parsing + Conditional RapidOCR + Rules)",
+      "evaluated_files": 64,
+      "accuracy_pct": 84.38,
+      "macro_precision_pct": 74.37,
+      "macro_recall_pct": 77.29,
+      "macro_f1_pct": 73.79,
+      "duplicate_precision_pct": 100.0,
+      "duplicate_recall_pct": 100.0,
+      "classify_time_ms": 4.386,
+      "peak_ram_mb": 0.034,
+      "manual_review_rate_pct": 26.56,
+      "tie_conflicts": 4
+    }
+  ],
+  "config_c_errors": [
+    {
+      "filename": "31.pdf",
+      "true": "Finance_Invoices",
+      "pred": "Academic_Study",
+      "confidence": 0.8085,
+      "extraction_status": "NATIVE_TEXT",
+      "matched_by": "rule:Academic_Study [ext(.pdf)+keywords(semester,b.tech)]"
+    },
+    {
+      "filename": "59021271.pdf",
+      "true": "Finance_Invoices",
+      "pred": "Academic_Study",
+      "confidence": 0.8085,
+      "extraction_status": "NATIVE_TEXT",
+      "matched_by": "rule:Academic_Study [ext(.pdf)+keywords(university,b.tech)]"
+    },
+    {
+      "filename": "Achintya Pathak_C++ Programming Course For Beginners.pdf",
+      "true": "Academic_Study",
+      "pred": "Uncategorized_Misc",
+      "confidence": 0.309,
+      "extraction_status": "NATIVE_TEXT",
+      "matched_by": "rule:fallback_uncategorized (NATIVE_TEXT)"
+    },
+    {
+      "filename": "AI_Downloads_Folder_Organization_White_Paper.docx",
+      "true": "Academic_Study",
+      "pred": "Career_Identity",
+      "confidence": 0.7085,
+      "extraction_status": "NATIVE_TEXT",
+      "matched_by": "rule:Career_Identity [ext(.docx)+keywords(internship)]"
+    },
+    {
+      "filename": "AI_Downloads_Folder_Organization_White_Paper_Achintya_Pathak.md",
+      "true": "Academic_Study",
+      "pred": "Uncategorized_Misc",
+      "confidence": 0.2585,
+      "extraction_status": "NATIVE_TEXT",
+      "matched_by": "rule:fallback_uncategorized (NATIVE_TEXT)"
+    },
+    {
+      "filename": "cpp.txt",
+      "true": "Academic_Study",
+      "pred": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "extraction_status": "NATIVE_TEXT",
+      "matched_by": "rule:fallback_uncategorized (NATIVE_TEXT)"
+    },
+    {
+      "filename": "decoder_diagram.png",
+      "true": "Academic_Study",
+      "pred": "Media_Screenshots",
+      "confidence": 0.4575,
+      "extraction_status": "SKIPPED_IMAGE_NON_DOC",
+      "matched_by": "rule:Media_Screenshots [ext(.png)]"
+    },
+    {
+      "filename": "solo-leveling-game-3840x2160-17908.jpeg",
+      "true": "Media_Photos_Graphics",
+      "pred": "Media_Screenshots",
+      "confidence": 0.4575,
+      "extraction_status": "SKIPPED_IMAGE_NON_DOC",
+      "matched_by": "rule:Media_Screenshots [ext(.jpeg)]"
+    },
+    {
+      "filename": "WhatsApp Image 2025-06-08 at 18.45.13.jpeg",
+      "true": "Career_Identity",
+      "pred": "Media_Photos_Graphics",
+      "confidence": 0.807,
+      "extraction_status": "SKIPPED_IMAGE_NON_DOC",
+      "matched_by": "rule:Media_Photos_Graphics [ext(.jpeg)+filename_regex]"
+    },
+    {
+      "filename": "WhatsApp Image 2025-06-08 at 19.10.07.jpeg",
+      "true": "Career_Identity",
+      "pred": "Media_Photos_Graphics",
+      "confidence": 0.807,
+      "extraction_status": "SKIPPED_IMAGE_NON_DOC",
+      "matched_by": "rule:Media_Photos_Graphics [ext(.jpeg)+filename_regex]"
+    }
+  ]
+}
