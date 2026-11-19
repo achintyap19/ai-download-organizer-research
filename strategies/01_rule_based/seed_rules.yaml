@@ -1,0 +1,82 @@
+﻿# General Domain Seed Rules (Written Blind — Zero Dataset-Specific Filenames)
+rules:
+  - id: archive_containers
+    category: Archives_Compressed
+    priority: 95
+    extensions: [".zip", ".rar", ".7z", ".tar", ".gz", ".xz"]
+    weights: { ext: 0.90, filename: 0.05, content: 0.05 }
+
+  - id: software_installers
+    category: Software_Installers
+    priority: 95
+    extensions: [".exe", ".msi", ".msix", ".deb", ".dmg", ".iso", ".apk"]
+    filename_regex: ["(?i)(setup|installer|amd64|x64|win64|arm64)"]
+    weights: { ext: 0.85, filename: 0.15, content: 0.0 }
+
+  - id: media_audio_video
+    category: Media_Audio_Video
+    priority: 90
+    extensions: [".mp4", ".mkv", ".avi", ".mov", ".webm", ".mp3", ".wav", ".flac", ".m4a"]
+    weights: { ext: 0.90, filename: 0.10, content: 0.0 }
+
+  - id: spreadsheets_data
+    category: Spreadsheets_Data
+    priority: 85
+    extensions: [".xlsx", ".xls", ".csv", ".tsv"]
+    exclude_content_regex: ["(?i)\\b(tax invoice|gstin|amount due|net payable)\\b"]
+    weights: { ext: 0.75, filename: 0.15, content: 0.10 }
+
+  - id: media_screenshots
+    category: Media_Screenshots
+    priority: 82
+    extensions: [".png", ".jpg", ".jpeg", ".webp"]
+    filename_regex: ["(?i)(screenshot|screen_shot|snip|capture)"]
+    weights: { ext: 0.30, filename: 0.65, content: 0.05 }
+
+  - id: academic_visual_diagrams
+    category: Academic_Study
+    priority: 80
+    extensions: [".png", ".jpg", ".jpeg"]
+    filename_regex: ["(?i)(diagram|circuit|logic|decoder|multiplexer|flowchart|architecture|graph)"]
+    content_regex: ["(?i)(decoder|multiplexer|boolean|equation|theorem|algorithm|circuit)"]
+    weights: { ext: 0.15, filename: 0.45, content: 0.40 }
+
+  - id: media_photos_graphics
+    category: Media_Photos_Graphics
+    priority: 60
+    extensions: [".png", ".jpg", ".jpeg", ".webp", ".svg"]
+    exclude_filename_regex: ["(?i)(screenshot|snip|whatsapp|scan|id|signature|diagram|circuit)"]
+    weights: { ext: 0.70, filename: 0.20, content: 0.10 }
+
+  - id: finance_invoices
+    category: Finance_Invoices
+    priority: 88
+    extensions: [".pdf", ".docx", ".xlsx"]
+    filename_regex: ["(?i)(invoice|receipt|challan|bill|statement|tax|voucher|txn|inv[_-])"]
+    content_regex:
+      - "(?i)\\b(tax invoice|gstin|cgst|sgst|igst|challan|amount due|net payable|total amount|amount paid)\\b"
+      - "(?i)\\b(upi|utr|transaction id|invoice no|billing|penalty fine|tuition fee)\\b"
+    weights: { ext: 0.15, filename: 0.35, content: 0.50 }
+
+  - id: career_identity
+    category: Career_Identity
+    priority: 84
+    extensions: [".pdf", ".docx", ".png", ".jpg", ".jpeg"]
+    filename_regex: ["(?i)(resume|curriculum[_\\s-]?vitae|\\bcv\\b|offer[_\\s-]?letter|id[_\\s-]?card|signature|passport|pan)"]
+    content_regex:
+      - "(?i)\\b(curriculum vitae|work experience|offer letter|stipend|permanent account number|identity proof|candidate signature)\\b"
+    exclude_content_regex:
+      - "(?i)\\b(abstract|theorem|normalization|subnetting|empirical evaluation|lecture module)\\b"
+    weights: { ext: 0.15, filename: 0.40, content: 0.45 }
+
+  - id: academic_study
+    category: Academic_Study
+    priority: 78
+    extensions: [".pdf", ".docx", ".pptx", ".txt", ".md", ".py", ".cpp", ".c", ".java", ".ipynb"]
+    filename_regex: ["(?i)(lecture|notes|syllabus|assignment|lab|module|unit|slides|white[_\\s-]?paper|course|tutorial|cpp|algorithm)"]
+    content_regex:
+      - "(?i)\\b(lecture|module|syllabus|algorithm|normalization|subnetting|compiler|gradient descent|abstract|empirical)\\b"
+      - "(?i)(#include|int main|def |class |problem set|theorem|proof|programming)"
+    exclude_content_regex:
+      - "(?i)\\b(tax invoice|gstin|amount due|offer letter|curriculum vitae)\\b"
+    weights: { ext: 0.20, filename: 0.35, content: 0.45 }

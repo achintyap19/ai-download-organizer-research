@@ -5,3 +5,8 @@ __pycache__/
 *.sqlite3
 datasets/sandbox_raw/
 .DS_Store
+
+# Generated synthetic corpus & transient runtime rules
+datasets/unseen_base_200/
+datasets/unseen_stream_20/
+strategies/01_rule_based/runtime_rules.yaml

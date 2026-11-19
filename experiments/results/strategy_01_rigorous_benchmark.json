@@ -1,0 +1,60 @@
+{
+  "unseen_200_blind": {
+    "config_a_metadata": {
+      "n": 200,
+      "accuracy_pct": 76.5,
+      "macro_precision_pct": 80.41,
+      "macro_recall_pct": 76.39,
+      "macro_f1_pct": 73.37,
+      "latency_ms": 5.99,
+      "review_queue_pct": 41.5
+    },
+    "config_b_native": {
+      "n": 200,
+      "accuracy_pct": 83.5,
+      "macro_precision_pct": 81.48,
+      "macro_recall_pct": 81.07,
+      "macro_f1_pct": 78.77,
+      "latency_ms": 10.94,
+      "review_queue_pct": 24.5
+    },
+    "config_c_ocr": {
+      "n": 200,
+      "accuracy_pct": 89.5,
+      "macro_precision_pct": 82.8,
+      "macro_recall_pct": 84.4,
+      "macro_f1_pct": 81.87,
+      "latency_ms": 11.3,
+      "review_queue_pct": 18.5
+    }
+  },
+  "incremental_stream_20": {
+    "before_runtime_rules": {
+      "n": 20,
+      "accuracy_pct": 60.0,
+      "macro_precision_pct": 35.71,
+      "macro_recall_pct": 50.0,
+      "macro_f1_pct": 40.0,
+      "latency_ms": 1.75,
+      "review_queue_pct": 70.0
+    },
+    "after_runtime_rules": {
+      "n": 20,
+      "accuracy_pct": 100.0,
+      "macro_precision_pct": 100.0,
+      "macro_recall_pct": 100.0,
+      "macro_f1_pct": 100.0,
+      "latency_ms": 3.08,
+      "review_queue_pct": 0.0
+    }
+  },
+  "cross_dataset_64_blind": {
+    "n": 64,
+    "accuracy_pct": 84.38,
+    "macro_precision_pct": 68.92,
+    "macro_recall_pct": 67.99,
+    "macro_f1_pct": 67.33,
+    "latency_ms": 32.15,
+    "review_queue_pct": 39.1
+  }
+}
