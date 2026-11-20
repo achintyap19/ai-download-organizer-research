@@ -1,0 +1,556 @@
+{
+  "benchmark_dataset": "real_wild_ground_truth.csv (n=96 unique non-template files)",
+  "stage1_blind_test_ablation": [
+    {
+      "n": 85,
+      "correct": 64,
+      "accuracy_pct": 75.29,
+      "macro_precision_pct": 93.02,
+      "macro_recall_pct": 76.29,
+      "macro_f1_pct": 80.13,
+      "review_queue_pct": 58.82,
+      "per_class": {
+        "Academic_Study": {
+          "support": 23,
+          "precision": 61.11,
+          "recall": 95.65,
+          "f1": 74.58
+        },
+        "Archives_Compressed": {
+          "support": 8,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Career_Identity": {
+          "support": 10,
+          "precision": 100.0,
+          "recall": 40.0,
+          "f1": 57.14
+        },
+        "Finance_Invoices": {
+          "support": 17,
+          "precision": 90.0,
+          "recall": 52.94,
+          "f1": 66.67
+        },
+        "Media_Photos_Graphics": {
+          "support": 5,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Software_Installers": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 45.45,
+          "f1": 62.5
+        },
+        "Spreadsheets_Data": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        }
+      },
+      "config": "Config A: Metadata-Only",
+      "scan_time_ms": 11.4,
+      "infer_time_ms": 5.6,
+      "extraction_statuses": {
+        "NOT_EXTRACTED": 85
+      }
+    },
+    {
+      "n": 85,
+      "correct": 65,
+      "accuracy_pct": 76.47,
+      "macro_precision_pct": 94.59,
+      "macro_recall_pct": 76.91,
+      "macro_f1_pct": 80.79,
+      "review_queue_pct": 35.29,
+      "per_class": {
+        "Academic_Study": {
+          "support": 23,
+          "precision": 62.16,
+          "recall": 100.0,
+          "f1": 76.67
+        },
+        "Archives_Compressed": {
+          "support": 8,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Career_Identity": {
+          "support": 10,
+          "precision": 100.0,
+          "recall": 40.0,
+          "f1": 57.14
+        },
+        "Finance_Invoices": {
+          "support": 17,
+          "precision": 100.0,
+          "recall": 52.94,
+          "f1": 69.23
+        },
+        "Media_Photos_Graphics": {
+          "support": 5,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Software_Installers": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 45.45,
+          "f1": 62.5
+        },
+        "Spreadsheets_Data": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        }
+      },
+      "config": "Config B: + Native Parsing",
+      "scan_time_ms": 1004.9,
+      "infer_time_ms": 33.5,
+      "extraction_statuses": {
+        "NATIVE_TEXT": 56,
+        "SKIPPED_IMAGE_NON_DOC": 5,
+        "EMPTY_OR_SCANNED": 5,
+        "UNSUPPORTED_EXT": 6,
+        "SKIPPED_BINARY": 13
+      }
+    },
+    {
+      "n": 85,
+      "correct": 64,
+      "accuracy_pct": 75.29,
+      "macro_precision_pct": 93.02,
+      "macro_recall_pct": 76.29,
+      "macro_f1_pct": 80.13,
+      "review_queue_pct": 32.94,
+      "per_class": {
+        "Academic_Study": {
+          "support": 23,
+          "precision": 61.11,
+          "recall": 95.65,
+          "f1": 74.58
+        },
+        "Archives_Compressed": {
+          "support": 8,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Career_Identity": {
+          "support": 10,
+          "precision": 100.0,
+          "recall": 40.0,
+          "f1": 57.14
+        },
+        "Finance_Invoices": {
+          "support": 17,
+          "precision": 90.0,
+          "recall": 52.94,
+          "f1": 66.67
+        },
+        "Media_Photos_Graphics": {
+          "support": 5,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Software_Installers": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 45.45,
+          "f1": 62.5
+        },
+        "Spreadsheets_Data": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        }
+      },
+      "config": "Config C: + Conditional RapidOCR",
+      "scan_time_ms": 38734.6,
+      "infer_time_ms": 32.5,
+      "extraction_statuses": {
+        "NATIVE_TEXT": 56,
+        "SKIPPED_IMAGE_NON_DOC": 5,
+        "OCR_USED": 5,
+        "UNSUPPORTED_EXT": 6,
+        "SKIPPED_BINARY": 13
+      }
+    }
+  ],
+  "stage1_config_c_misclassifications": [
+    {
+      "filename": "Achintya_Pathak_CV.pdf",
+      "source_domain": "downloads_untouched",
+      "true_category": "Career_Identity",
+      "predicted": "Academic_Study",
+      "confidence": 0.65,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": false
+    },
+    {
+      "filename": "AchintyaEIS (1).pdf",
+      "source_domain": "downloads_untouched",
+      "true_category": "Career_Identity",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "awesome_cv_coverletter.pdf",
+      "source_domain": "github.com",
+      "true_category": "Career_Identity",
+      "predicted": "Academic_Study",
+      "confidence": 0.65,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": false
+    },
+    {
+      "filename": "awesome_cv_full.pdf",
+      "source_domain": "github.com",
+      "true_category": "Career_Identity",
+      "predicted": "Academic_Study",
+      "confidence": 0.65,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": false
+    },
+    {
+      "filename": "click-8.1.7-py3-none-any.whl",
+      "source_domain": "pypi.org",
+      "true_category": "Software_Installers",
+      "predicted": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "matched_by": "none",
+      "extraction_status": "UNSUPPORTED_EXT",
+      "needs_review": true
+    },
+    {
+      "filename": "Examination Admit Card.pdf",
+      "source_domain": "downloads_untouched",
+      "true_category": "Career_Identity",
+      "predicted": "Academic_Study",
+      "confidence": 0.4,
+      "matched_by": "rule:academic_visual_diagrams",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "f1040.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "f1040sc.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "f1099nec.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "f941.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "fastapi-0.115.4-py3-none-any.whl",
+      "source_domain": "pypi.org",
+      "true_category": "Software_Installers",
+      "predicted": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "matched_by": "none",
+      "extraction_status": "UNSUPPORTED_EXT",
+      "needs_review": true
+    },
+    {
+      "filename": "fss4.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "fw2.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "fw9.pdf",
+      "source_domain": "irs.gov",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    },
+    {
+      "filename": "hj.pdf",
+      "source_domain": "downloads_untouched",
+      "true_category": "Academic_Study",
+      "predicted": "Finance_Invoices",
+      "confidence": 0.65,
+      "matched_by": "rule:finance_invoices",
+      "extraction_status": "OCR_USED",
+      "needs_review": false
+    },
+    {
+      "filename": "httpx-0.27.2-py3-none-any.whl",
+      "source_domain": "pypi.org",
+      "true_category": "Software_Installers",
+      "predicted": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "matched_by": "none",
+      "extraction_status": "UNSUPPORTED_EXT",
+      "needs_review": true
+    },
+    {
+      "filename": "pytest-8.3.3-py3-none-any.whl",
+      "source_domain": "pypi.org",
+      "true_category": "Software_Installers",
+      "predicted": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "matched_by": "none",
+      "extraction_status": "UNSUPPORTED_EXT",
+      "needs_review": true
+    },
+    {
+      "filename": "requests-2.32.3-py3-none-any.whl",
+      "source_domain": "pypi.org",
+      "true_category": "Software_Installers",
+      "predicted": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "matched_by": "none",
+      "extraction_status": "UNSUPPORTED_EXT",
+      "needs_review": true
+    },
+    {
+      "filename": "rich-13.9.4-py3-none-any.whl",
+      "source_domain": "pypi.org",
+      "true_category": "Software_Installers",
+      "predicted": "Uncategorized_Misc",
+      "confidence": 0.0,
+      "matched_by": "none",
+      "extraction_status": "UNSUPPORTED_EXT",
+      "needs_review": true
+    },
+    {
+      "filename": "uttarpradesh.amity-DGMST-2025A2345924002IJANUARY.pdf",
+      "source_domain": "downloads_untouched",
+      "true_category": "Career_Identity",
+      "predicted": "Academic_Study",
+      "confidence": 0.65,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": false
+    },
+    {
+      "filename": "Your Accounts_XXXXXX170_13112026.PDF",
+      "source_domain": "downloads_untouched",
+      "true_category": "Finance_Invoices",
+      "predicted": "Academic_Study",
+      "confidence": 0.2,
+      "matched_by": "rule:academic_study",
+      "extraction_status": "NATIVE_TEXT",
+      "needs_review": true
+    }
+  ],
+  "stage2_disjoint_few_shot_adaptation": {
+    "k_labeled_per_new_category": 2,
+    "total_labeled_support_files": 4,
+    "disjoint_unseen_query_files": 7,
+    "before_adaptation": {
+      "n": 7,
+      "correct": 0,
+      "accuracy_pct": 0.0,
+      "macro_precision_pct": 0.0,
+      "macro_recall_pct": 0.0,
+      "macro_f1_pct": 0.0,
+      "review_queue_pct": 85.71,
+      "per_class": {
+        "Medical_Health": {
+          "support": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "Travel_Bookings": {
+          "support": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "after_k2_adaptation": {
+      "n": 7,
+      "correct": 4,
+      "accuracy_pct": 57.14,
+      "macro_precision_pct": 100.0,
+      "macro_recall_pct": 54.17,
+      "macro_f1_pct": 67.86,
+      "review_queue_pct": 28.57,
+      "per_class": {
+        "Medical_Health": {
+          "support": 4,
+          "precision": 100.0,
+          "recall": 75.0,
+          "f1": 85.71
+        },
+        "Travel_Bookings": {
+          "support": 3,
+          "precision": 100.0,
+          "recall": 33.33,
+          "f1": 50.0
+        }
+      }
+    },
+    "induced_rules": {
+      "Medical_Health": {
+        "k_support_files": 2,
+        "support_filenames": [
+          "CBC-test-report-format-example-sample-template-Drlogy-lab-report.pdf",
+          "complete-blood-count-(cbc).pdf"
+        ],
+        "induced_filename_regex": [
+          "(?i)\\b(cbc)\\b"
+        ],
+        "induced_content_regex": [
+          "(?i)\\b(result|mchc|complete|unit|type)\\b"
+        ],
+        "rule_id": "rt_medical_health_001"
+      },
+      "Travel_Bookings": {
+        "k_support_files": 2,
+        "support_filenames": [
+          "000262548.pdf",
+          "Flight_ETicket_1111200071731.pdf"
+        ],
+        "induced_filename_regex": [],
+        "induced_content_regex": [
+          "(?i)\\b(travel)\\b"
+        ],
+        "rule_id": "rt_travel_bookings_002"
+      }
+    },
+    "query_predictions": [
+      {
+        "filename": "2742721020156116.pdf",
+        "true_category": "Travel_Bookings",
+        "before_pred": "Finance_Invoices",
+        "before_conf": 0.65,
+        "after_pred": "Finance_Invoices",
+        "after_conf": 0.65,
+        "after_matched_by": "rule:finance_invoices"
+      },
+      {
+        "filename": "PK0016.pdf",
+        "true_category": "Medical_Health",
+        "before_pred": "Academic_Study",
+        "before_conf": 0.2,
+        "after_pred": "Medical_Health",
+        "after_conf": 0.77,
+        "after_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "Sample-Travel-Itinerary-2.pdf",
+        "true_category": "Travel_Bookings",
+        "before_pred": "Academic_Study",
+        "before_conf": 0.2,
+        "after_pred": "Travel_Bookings",
+        "after_conf": 0.77,
+        "after_matched_by": "rule:rt_travel_bookings_002"
+      },
+      {
+        "filename": "sample.pdf",
+        "true_category": "Travel_Bookings",
+        "before_pred": "Academic_Study",
+        "before_conf": 0.65,
+        "after_pred": "Academic_Study",
+        "after_conf": 0.65,
+        "after_matched_by": "rule:academic_study"
+      },
+      {
+        "filename": "sterling-accuris-pathology-sample-report-unlocked.pdf",
+        "true_category": "Medical_Health",
+        "before_pred": "Academic_Study",
+        "before_conf": 0.2,
+        "after_pred": "Medical_Health",
+        "after_conf": 0.77,
+        "after_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "Wellwise Platinum Profile - 5048.pdf",
+        "true_category": "Medical_Health",
+        "before_pred": "Academic_Study",
+        "before_conf": 0.2,
+        "after_pred": "Medical_Health",
+        "after_conf": 0.77,
+        "after_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "Z021.pdf",
+        "true_category": "Medical_Health",
+        "before_pred": "Academic_Study",
+        "before_conf": 0.2,
+        "after_pred": "Academic_Study",
+        "after_conf": 0.2,
+        "after_matched_by": "rule:academic_study"
+      }
+    ]
+  },
+  "non_circular_duplicate_audit": {
+    "total_audit_files": 20,
+    "seeded_duplicate_pairs": 10,
+    "true_positives": 10,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "precision_pct": 100.0,
+    "recall_pct": 100.0,
+    "f1_pct": 100.0
+  }
+}

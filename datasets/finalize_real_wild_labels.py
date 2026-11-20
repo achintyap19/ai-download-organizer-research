@@ -100,11 +100,11 @@ LABELS = {
     "ripgrep-14.1.1.zip": ("Archives_Compressed", "github.com", "blind_test"),
 
     # Media_Visuals (5 unique files)
-    "500px-Camponotus_flavomarginatus_ant.jpg": ("Media_Visuals", "wikimedia.org", "blind_test"),
-    "500px-Cat03.jpg": ("Media_Visuals", "wikimedia.org", "blind_test"),
-    "500px-Gull_portrait_ca_usa.jpg": ("Media_Visuals", "wikimedia.org", "blind_test"),
-    "500px-Image_created_with_a_mobile_phone.png": ("Media_Visuals", "wikimedia.org", "blind_test"),
-    "500px-PNG_transparency_demonstration_1.png": ("Media_Visuals", "wikimedia.org", "blind_test"),
+    "500px-Camponotus_flavomarginatus_ant.jpg": ("Media_Photos_Graphics", "wikimedia.org", "blind_test"),
+    "500px-Cat03.jpg": ("Media_Photos_Graphics", "wikimedia.org", "blind_test"),
+    "500px-Gull_portrait_ca_usa.jpg": ("Media_Photos_Graphics", "wikimedia.org", "blind_test"),
+    "500px-Image_created_with_a_mobile_phone.png": ("Media_Photos_Graphics", "wikimedia.org", "blind_test"),
+    "500px-PNG_transparency_demonstration_1.png": ("Media_Photos_Graphics", "wikimedia.org", "blind_test"),
 
     # Travel_Bookings — Held-out unseen category (2 support + 3 disjoint query = 5 unique files)
     "000262548.pdf": ("Travel_Bookings", "public_sample", "stage2_support"),
