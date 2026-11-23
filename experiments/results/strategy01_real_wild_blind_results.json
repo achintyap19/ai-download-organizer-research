@@ -5,10 +5,17 @@
       "n": 85,
       "correct": 64,
       "accuracy_pct": 75.29,
+      "auto_moved_count": 35,
+      "auto_moved_correct": 35,
+      "auto_move_accuracy_pct": 100.0,
+      "review_queue_count": 50,
+      "review_queue_pct": 58.82,
+      "unflagged_wrong_moves": 0,
+      "unflagged_wrong_move_pct": 0.0,
+      "flagged_wrong_moves": 21,
       "macro_precision_pct": 93.02,
       "macro_recall_pct": 76.29,
       "macro_f1_pct": 80.13,
-      "review_queue_pct": 58.82,
       "per_class": {
         "Academic_Study": {
           "support": 23,
@@ -53,21 +60,28 @@
           "f1": 100.0
         }
       },
-      "config": "Config A: Metadata-Only",
-      "scan_time_ms": 11.4,
-      "infer_time_ms": 5.6,
+      "infer_time_ms": 3.4,
       "extraction_statuses": {
         "NOT_EXTRACTED": 85
-      }
+      },
+      "config": "Config A: Metadata-Only",
+      "scan_time_ms": 11.1
     },
     {
       "n": 85,
       "correct": 65,
       "accuracy_pct": 76.47,
+      "auto_moved_count": 55,
+      "auto_moved_correct": 51,
+      "auto_move_accuracy_pct": 92.73,
+      "review_queue_count": 30,
+      "review_queue_pct": 35.29,
+      "unflagged_wrong_moves": 4,
+      "unflagged_wrong_move_pct": 4.71,
+      "flagged_wrong_moves": 16,
       "macro_precision_pct": 94.59,
       "macro_recall_pct": 76.91,
       "macro_f1_pct": 80.79,
-      "review_queue_pct": 35.29,
       "per_class": {
         "Academic_Study": {
           "support": 23,
@@ -112,25 +126,32 @@
           "f1": 100.0
         }
       },
-      "config": "Config B: + Native Parsing",
-      "scan_time_ms": 1004.9,
-      "infer_time_ms": 33.5,
+      "infer_time_ms": 33.4,
       "extraction_statuses": {
         "NATIVE_TEXT": 56,
         "SKIPPED_IMAGE_NON_DOC": 5,
         "EMPTY_OR_SCANNED": 5,
         "UNSUPPORTED_EXT": 6,
         "SKIPPED_BINARY": 13
-      }
+      },
+      "config": "Config B: + Native Parsing",
+      "scan_time_ms": 1014.2
     },
     {
       "n": 85,
       "correct": 64,
       "accuracy_pct": 75.29,
+      "auto_moved_count": 57,
+      "auto_moved_correct": 52,
+      "auto_move_accuracy_pct": 91.23,
+      "review_queue_count": 28,
+      "review_queue_pct": 32.94,
+      "unflagged_wrong_moves": 5,
+      "unflagged_wrong_move_pct": 5.88,
+      "flagged_wrong_moves": 16,
       "macro_precision_pct": 93.02,
       "macro_recall_pct": 76.29,
       "macro_f1_pct": 80.13,
-      "review_queue_pct": 32.94,
       "per_class": {
         "Academic_Study": {
           "support": 23,
@@ -175,16 +196,16 @@
           "f1": 100.0
         }
       },
-      "config": "Config C: + Conditional RapidOCR",
-      "scan_time_ms": 38734.6,
-      "infer_time_ms": 32.5,
+      "infer_time_ms": 33.2,
       "extraction_statuses": {
         "NATIVE_TEXT": 56,
         "SKIPPED_IMAGE_NON_DOC": 5,
         "OCR_USED": 5,
         "UNSUPPORTED_EXT": 6,
         "SKIPPED_BINARY": 13
-      }
+      },
+      "config": "Config C: + Conditional RapidOCR",
+      "scan_time_ms": 39358.7
     }
   ],
   "stage1_config_c_misclassifications": [
@@ -407,10 +428,17 @@
       "n": 7,
       "correct": 0,
       "accuracy_pct": 0.0,
+      "auto_moved_count": 1,
+      "auto_moved_correct": 0,
+      "auto_move_accuracy_pct": 0.0,
+      "review_queue_count": 6,
+      "review_queue_pct": 85.71,
+      "unflagged_wrong_moves": 1,
+      "unflagged_wrong_move_pct": 14.29,
+      "flagged_wrong_moves": 6,
       "macro_precision_pct": 0.0,
       "macro_recall_pct": 0.0,
       "macro_f1_pct": 0.0,
-      "review_queue_pct": 85.71,
       "per_class": {
         "Medical_Health": {
           "support": 4,
@@ -428,18 +456,25 @@
     },
     "after_k2_adaptation": {
       "n": 7,
-      "correct": 4,
-      "accuracy_pct": 57.14,
+      "correct": 3,
+      "accuracy_pct": 42.86,
+      "auto_moved_count": 4,
+      "auto_moved_correct": 3,
+      "auto_move_accuracy_pct": 75.0,
+      "review_queue_count": 3,
+      "review_queue_pct": 42.86,
+      "unflagged_wrong_moves": 1,
+      "unflagged_wrong_move_pct": 14.29,
+      "flagged_wrong_moves": 3,
       "macro_precision_pct": 100.0,
-      "macro_recall_pct": 54.17,
-      "macro_f1_pct": 67.86,
-      "review_queue_pct": 28.57,
+      "macro_recall_pct": 41.67,
+      "macro_f1_pct": 58.33,
       "per_class": {
         "Medical_Health": {
           "support": 4,
           "precision": 100.0,
-          "recall": 75.0,
-          "f1": 85.71
+          "recall": 50.0,
+          "f1": 66.67
         },
         "Travel_Bookings": {
           "support": 3,
@@ -460,7 +495,7 @@
           "(?i)\\b(cbc)\\b"
         ],
         "induced_content_regex": [
-          "(?i)\\b(result|mchc|complete|unit|type)\\b"
+          "(?i)\\b(indices|mchc|complete|type|count)\\b"
         ],
         "rule_id": "rt_medical_health_001"
       },
@@ -492,9 +527,9 @@
         "true_category": "Medical_Health",
         "before_pred": "Academic_Study",
         "before_conf": 0.2,
-        "after_pred": "Medical_Health",
-        "after_conf": 0.77,
-        "after_matched_by": "rule:rt_medical_health_001"
+        "after_pred": "Academic_Study",
+        "after_conf": 0.2,
+        "after_matched_by": "rule:academic_study"
       },
       {
         "filename": "Sample-Travel-Itinerary-2.pdf",
@@ -542,6 +577,136 @@
         "after_matched_by": "rule:academic_study"
       }
     ]
+  },
+  "post_adaptation_85file_non_regression": {
+    "runtime_rules_loaded": [
+      "Medical_Health",
+      "Travel_Bookings"
+    ],
+    "pre_adaptation_accuracy_pct": 75.29,
+    "post_adaptation_accuracy_pct": 74.12,
+    "accuracy_delta_pct": -1.17,
+    "pre_adaptation_auto_move_accuracy_pct": 91.23,
+    "post_adaptation_auto_move_accuracy_pct": 83.87,
+    "pre_adaptation_unflagged_wrong_moves": 5,
+    "post_adaptation_unflagged_wrong_moves": 10,
+    "post_adaptation_metrics": {
+      "n": 85,
+      "correct": 63,
+      "accuracy_pct": 74.12,
+      "auto_moved_count": 62,
+      "auto_moved_correct": 52,
+      "auto_move_accuracy_pct": 83.87,
+      "review_queue_count": 23,
+      "review_queue_pct": 27.06,
+      "unflagged_wrong_moves": 10,
+      "unflagged_wrong_move_pct": 11.76,
+      "flagged_wrong_moves": 12,
+      "macro_precision_pct": 93.96,
+      "macro_recall_pct": 75.67,
+      "macro_f1_pct": 80.58,
+      "per_class": {
+        "Academic_Study": {
+          "support": 23,
+          "precision": 67.74,
+          "recall": 91.3,
+          "f1": 77.78
+        },
+        "Archives_Compressed": {
+          "support": 8,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Career_Identity": {
+          "support": 10,
+          "precision": 100.0,
+          "recall": 40.0,
+          "f1": 57.14
+        },
+        "Finance_Invoices": {
+          "support": 17,
+          "precision": 90.0,
+          "recall": 52.94,
+          "f1": 66.67
+        },
+        "Media_Photos_Graphics": {
+          "support": 5,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Software_Installers": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 45.45,
+          "f1": 62.5
+        },
+        "Spreadsheets_Data": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        }
+      },
+      "infer_time_ms": 37.3,
+      "extraction_statuses": {
+        "NATIVE_TEXT": 56,
+        "SKIPPED_IMAGE_NON_DOC": 5,
+        "OCR_USED": 5,
+        "UNSUPPORTED_EXT": 6,
+        "SKIPPED_BINARY": 13
+      }
+    },
+    "changed_predictions_count": 5,
+    "changed_predictions": [
+      {
+        "filename": "E-book of OOP using C++ (E Balagurusamy).pdf",
+        "true_category": "Academic_Study",
+        "pre_pred": "Academic_Study",
+        "pre_review": true,
+        "post_pred": "Medical_Health",
+        "post_review": false,
+        "post_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "f1040.pdf",
+        "true_category": "Finance_Invoices",
+        "pre_pred": "Academic_Study",
+        "pre_review": true,
+        "post_pred": "Medical_Health",
+        "post_review": false,
+        "post_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "f941.pdf",
+        "true_category": "Finance_Invoices",
+        "pre_pred": "Academic_Study",
+        "pre_review": true,
+        "post_pred": "Medical_Health",
+        "post_review": false,
+        "post_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "fss4.pdf",
+        "true_category": "Finance_Invoices",
+        "pre_pred": "Academic_Study",
+        "pre_review": true,
+        "post_pred": "Medical_Health",
+        "post_review": false,
+        "post_matched_by": "rule:rt_medical_health_001"
+      },
+      {
+        "filename": "fw9.pdf",
+        "true_category": "Finance_Invoices",
+        "pre_pred": "Academic_Study",
+        "pre_review": true,
+        "post_pred": "Medical_Health",
+        "post_review": false,
+        "post_matched_by": "rule:rt_medical_health_001"
+      }
+    ],
+    "remaining_errors_count": 22
   },
   "non_circular_duplicate_audit": {
     "total_audit_files": 20,
