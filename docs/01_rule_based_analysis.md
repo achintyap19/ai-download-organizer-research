@@ -37,8 +37,8 @@ Running OCR blindly across hundreds of files would require `~6+ minutes` on CPU.
 ### 1.6 Multi-Signal Scoring & Anti-False-Positive Guards
 1. **Weighted Multi-Modal Scoring:** Combines `extensions`, `filename_regex`, and `content_regex` with diminishing-returns hit scaling, a **Header Boost (`+0.12`)** for matches in the first 250 characters, and a **Cross-Modal Corroboration Bonus (`+0.10`)** when filename and body agree.
 2. **Ambiguous Generic Document Guards:**
-   - Standalone generic documents (`.pdf`, `.docx`, `.xlsx`, `.pptx`, `.txt`, `.md`) with zero filename or content matches are capped at `0.25` (forcing `needs_review = True`).
-   - Filename-only matches on generic documents with `body_hits == 0` (when readable body text exists) are capped at **`0.48`** (`unconfirmed_fn_only`), preventing false confident routing (e.g., `lab_diagnostic_cbc_1.pdf` falsely auto-filing into `Academic_Study` via `"lab"`).
+  - Standalone generic documents (`.pdf`, `.docx`, `.xlsx`, `.pptx`, `.txt`, `.md`) with zero filename or content matches are capped at `0.25` (forcing `needs_review = True`).
+  - Filename-only matches on generic documents with `body_hits == 0` (when readable body text exists) are capped at **`0.48`** (`unconfirmed_fn_only`), preventing false confident routing (e.g., `lab_diagnostic_cbc_1.pdf` falsely auto-filing into `Academic_Study` via `"lab"`).
 3. **Ambiguity Margin (`<= 0.10`):** Top-two rules within `0.10` points flag `needs_review = True` and record `conflict_with`.
 
 ---
@@ -47,14 +47,19 @@ Running OCR blindly across hundreds of files would require `~6+ minutes` on CPU.
 
 To eliminate synthetic template repetition, duplicate-inflated accuracy, and post-hoc rule tuning, Strategy 01 was evaluated on a brand-new corpus of **$N = 96$ unique, non-templated real-world files** (`datasets/real_wild_ground_truth.csv`). Every file was deduplicated via SHA-256 and manually annotated from raw document snippets prior to inference (`git commit fe97d3b`), and the frozen rule engine (`seed_rules.yaml` and `dynamic_classifier.py`) was executed **once** (`git commit a28ede8`) without any rule modifications.
 
-### 2.1 Stage 1: Real-World Blind Ablation (`n = 85` Unique Files, 7 Core Categories)
+### 2.1 Stage 1: Real-World Blind Ablation & Operational Safety (`n = 85` Unique Files, 7 Core Categories)
 Evaluated across untouched user downloads and diverse public sources (`arXiv`, `IRS.gov`, `IETF RFCs`, `PyPI`, `GitHub Releases`, `TidyTuesday`, `Seaborn`, `Wikimedia Commons`, and public utility/invoice samples) using **only** frozen `seed_rules.yaml`:
 
-| Configuration | Accuracy | Macro F1 | Review Queue | Scan Latency | Key Takeaway |
-| :--- | :---: | :---: | :---: | :---: | :--- |
-| **Config A:** Metadata & Filename Regex Only | `75.29%` (`64/85`) | `80.13%` | `58.82%` | `11.4 ms` | Nearly `59%` of real downloads lack descriptive filenames and require manual review. |
-| **Config B:** + Native Document Parsing | **`76.47%` (`65/85`)** | **`80.79%`** | `35.29%` | `1,004.9 ms` | Native text extraction (`PyMuPDF`, `python-docx`) cuts the human review queue by **`23.53` percentage points** in `1.00 s`. |
-| **Config C:** + Conditional `RapidOCR` | `75.29%` (`64/85`) | `80.13%` | **`32.94%`** | `38,734.6 ms` | Further lowers review rate to `32.94%`, but adds `37.7 s` CPU OCR overhead and 1 noisy-token false positive (`hj.pdf`). |
+| Configuration | Overall Accuracy | Auto-Move Accuracy | Manual Review Queue | Unflagged Wrong Moves | Macro F1 | Scan Latency |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Config A:** Metadata & Filename Regex Only | `75.29%` (`64/85`) | **`100.00%`** (`35/35`) | `58.82%` (`50/85`) | **`0` (`0.00%`)** | `80.13%` | `11.4 ms` |
+| **Config B:** + Native Document Parsing | **`76.47%` (`65/85`)** | `92.73%` (`51/55`) | `35.29%` (`30/85`) | `4` (`4.71%`) | **`80.79%`** | `1,004.9 ms` |
+| **Config C:** + Conditional `RapidOCR` | `75.29%` (`64/85`) | `91.23%` (`52/57`) | **`32.94%`** (`28/85`) | `5` (`5.88%`) | `80.13%` | `38,734.6 ms` |
+
+#### Key Operational Safety Takeaways
+- **Metadata-Only Zero-Error Guarantee (`Config A`):** Achieves **`100.00%` Auto-Move Accuracy** (`35/35`) and **`0` Unflagged Wrong Moves**, at the cost of holding `58.82%` of files in the human review queue.
+- **Native Document Parsing Trade-Off (`Config B`):** Cuts the human review burden by **`23.53` percentage points** (`58.82%` $\rightarrow$ `35.29%`) while maintaining **`92.73%` Auto-Move Accuracy** (`51/55`) and only `4` unflagged errors (`4.71%`).
+- **Conditional OCR Trade-Off (`Config C`):** Further reduces review burden to **`32.94%`** (`52/57` auto-moved at `91.23%` Auto-Move Accuracy), adding 1 noisy-token unflagged error (`hj.pdf`, `5` total / `5.88%`).
 
 #### Per-Category Performance on the Real-World Blind Set (`n = 85`, Config C)
 - **Perfect Precision & Recall (`100.00%` F1):** `Archives_Compressed` ($n=8$), `Media_Photos_Graphics` ($n=5$), and `Spreadsheets_Data` ($n=11$).
@@ -67,23 +72,37 @@ Evaluated across untouched user downloads and diverse public sources (`arXiv`, `
 ### 2.2 Stage 2: Disjoint Few-Shot Unseen-Domain Adaptation (`Travel_Bookings` & `Medical_Health`)
 To evaluate runtime adaptation without support/query leakage, 11 real-world files from two completely held-out domains absent from `seed_rules.yaml` were partitioned into a **labeled support set ($k = 2$ files per domain, 4 total)** and a **strictly disjoint unseen query set ($m = 7$ files: 3 Travel, 4 Medical)**:
 
-| Evaluation Phase | Accuracy ($m = 7$) | Macro F1 | Labeling Cost | Per-Domain Breakdown |
-| :--- | :---: | :---: | :---: | :--- |
-| **Before Adaptation (Frozen Seed Rules)** | `0.00%` (`0/7`) | `0.00%` | `0` labels | Zero false routing into unseen categories prior to rule induction. |
-| **After $k = 2$ Support Rule Induction** | **`57.14%` (`4/7`)** | **`67.86%`** | $k = 2$ files/domain | `Medical_Health`: **`75.00%` (`3/4`)** · `Travel_Bookings`: **`33.33%` (`1/3`)** |
+| Evaluation Phase | Overall Acc ($m = 7$) | Auto-Move Acc | Review Queue | Unflagged Wrong | Macro F1 | Labeling Cost |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Before Adaptation (Frozen Seed Rules)** | `0.00%` (`0/7`) | `0.00%` (`0/1`) | `85.71%` (`6/7`) | `1` (`14.29%`) | `0.00%` | `0` labels |
+| **After $k = 2$ Support Rule Induction** | **`42.86%` (`3/7`)** | **`75.00%` (`3/4`)** | **`42.86%` (`3/7`)** | `1` (`14.29%`) | **`53.57%`** | $k = 2$ files/domain |
 
-### 2.3 Independent Non-Circular Duplicate Detection Audit (`10` Seeded Copy Pairs)
+### 2.3 Stage 2 Non-Regression Check (`n = 85` Blind Set With Learned Medical/Travel Rules Active)
+To verify whether dynamically induced runtime rules degrade existing categories, the frozen `n = 85` blind test (`Config C`) was re-evaluated with the learned `Medical_Health` and `Travel_Bookings` rules persisted in `runtime_rules.yaml`:
+
+| Metric (`n = 85`, Config C) | Pre-Adaptation (Seed Only) | Post-Adaptation (+ Learned Rules) | Delta |
+| :--- | :---: | :---: | :---: |
+| **Overall Accuracy** | `75.29%` (`64/85`) | `74.12%` (`63/85`) | **`-1.17%`** (`-1` net) |
+| **Auto-Move Accuracy** | `91.23%` (`52/57`) | `83.87%` (`52/62`) | **`-7.36%`** |
+| **Manual Review Queue** | `32.94%` (`28/85`) | `27.06%` (`23/85`) | `-5.88%` |
+| **Unflagged Wrong Moves** | `5` (`5.88%`) | `10` (`11.76%`) | **`+5` regressions** |
+
+- **Root Cause of the 5 Post-Adaptation Regressions:** `rt_medical_health_001` (`priority=86`) extracted generic tokens shared between the $k=2$ medical support PDFs that also matched 4 US IRS tax forms (`f1040.pdf`, `f941.pdf`, `fss4.pdf`, `fw9.pdf`; `Finance_Invoices` $\rightarrow$ `Medical_Health`) and `E-book of OOP using C++ (E Balagurusamy).pdf` (`Academic_Study` $\rightarrow$ `Medical_Health`) with `needs_review = False`.
+- **Architectural Implication:** Unregularized regex induction from tiny ($k=2$) support sets lacks inverse document frequency (IDF) weighting and semantic regularization, causing high-priority lexical false positives on out-of-distribution documents.
+
+### 2.4 Independent Non-Circular Duplicate Detection Audit (`10` Seeded Copy Pairs)
 To avoid circular evaluation against the detector's own labels, 10 distinct source files were paired with 10 externally generated, renamed copies (`Copy_01_final_<name>`) with pre-recorded ground-truth pairs before running `detect_exact_duplicates()` (`Size` $\rightarrow$ `Partial SHA-256` $\rightarrow$ `Full SHA-256`):
 - **Precision:** **`100.00%`** | **Recall:** **`100.00%`** | **F1-Score:** **`100.00%`** (`TP = 10, FP = 0, FN = 0`).
 
 ---
 
-## 3. Empirical Error Analysis of the 21 Blind Misclassifications (Motivating Strategies 02–05)
+## 3. Empirical Error Analysis of Blind Misclassifications (Motivating Strategies 02–05)
 
-Inspecting all **21 errors (`24.71%` error rate)** on the frozen real-world blind set reveals five concrete structural limitations of deterministic rule engines:
+Inspecting the blind misclassifications and non-regression audit reveals six concrete structural limitations of deterministic rule engines:
 
 1. **Extension & Packaging Blindness (`6` errors):** All six PyPI wheel installers (`*.whl`) fell into `Uncategorized_Misc` (`conf = 0.0`) because `seed_rules.yaml` only enumerated `.exe`/`.msi` under `Software_Installers`.
 2. **Regional & Sub-Domain Vocabulary Shift (`8` errors):** While `100%` of commercial invoices and utility bills were classified accurately, 7 US IRS tax forms (`f1040.pdf`, `fw2.pdf`, `f1099nec.pdf`, etc.) and 1 Indian bank balance snapshot (`Your Accounts_...PDF`) lacked Indian GST/invoice keywords and defaulted to `Academic_Study` (`conf = 0.20`).
 3. **Rule Priority & Multi-Domain Overlap (`6` errors):** Resumes, CVs, cover letters, admit cards, and university marksheets (`Career_Identity`) contain strong academic terms (`B.Tech`, `University`, `Computer Science`, `Examination`), causing `academic_study` rules to tie or override `career_identity`.
 4. **OCR Latency & Noisy-Token Sensitivity (`1` error + `37×` slowdown):** Invoking `RapidOCR` on scanned PDFs increased scan latency from `1.00 s` to `38.73 s` and caused a noisy OCR token in `hj.pdf` to trigger a false `Finance_Invoices` match (dropping Config C accuracy by `1.18%` below Config B).
-5. **Lexical Sparsity in $k = 2$ Few-Shot Induction (`3/7` unseen queries missed):** Exact token intersection (`min_doc_freq = 2`) across $k = 2$ support files generalized well on standardized lab reports (`3/4` Medical queries solved, missing only `Z021.pdf` due to custom PUA font encoding), but struggled across heterogeneous travel formats (visa itinerary vs. domestic e-ticket), motivating **TF-IDF statistical weighting (Strategy 02)**, **dense semantic embeddings (Strategy 03)**, and **multimodal LLM escalation (Strategies 04–05)**.
+5. **Post-Adaptation Lexical False-Positive Drift (`5` regressions):** High-priority runtime regex rules induced from $k=2$ files lack global IDF calibration, causing generic tokens in `rt_medical_health_001` to hijack previously flagged IRS tax forms and textbooks into unflagged wrong moves.
+6. **Lexical Sparsity in $k = 2$ Few-Shot Induction:** Exact token intersection (`min_doc_freq = 2`) across $k = 2$ support files struggles across heterogeneous formats (visa itinerary vs. domestic e-ticket), motivating **TF-IDF statistical weighting (Strategy 02)**, **dense semantic embeddings (Strategy 03)**, and **multimodal LLM escalation (Strategies 04–05)**.
