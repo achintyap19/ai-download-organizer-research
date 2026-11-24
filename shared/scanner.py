@@ -1,25 +1,33 @@
 ﻿from collections import defaultdict
 from datetime import datetime
 import hashlib
+import json
 from pathlib import Path
 import re
 from typing import Dict, List, Set, Tuple
 from .models import FileRecord
 
 TEMP_EXTENSIONS: Set[str] = {".crdownload", ".part", ".tmp", ".download"}
-BINARY_SKIP_EXTENSIONS: Set[str] = {
-    ".exe", ".msi", ".msix", ".deb", ".dmg", ".iso", ".apk",
-    ".zip", ".rar", ".7z", ".tar", ".gz", ".xz",
-    ".mp4", ".mkv", ".avi", ".mov", ".webm", ".mp3", ".wav", ".flac", ".m4a",
+INSTALLER_EXTENSIONS: Set[str] = {".exe", ".msi", ".msix", ".deb", ".rpm", ".appimage", ".dmg", ".pkg", ".apk", ".whl", ".jar", ".vsix"}
+ARCHIVE_EXTENSIONS: Set[str] = {".zip", ".rar", ".7z", ".tar", ".gz", ".tgz", ".xz", ".bz2"}
+MEDIA_AV_EXTENSIONS: Set[str] = {".mp4", ".mkv", ".avi", ".mov", ".webm", ".wmv", ".mp3", ".wav", ".flac", ".m4a", ".ogg", ".aac"}
+BINARY_SKIP_EXTENSIONS: Set[str] = INSTALLER_EXTENSIONS | ARCHIVE_EXTENSIONS | MEDIA_AV_EXTENSIONS
+
+PLAIN_TEXT_EXTENSIONS: Set[str] = {
+    ".txt", ".md", ".rst", ".log", ".csv", ".tsv",
+    ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".cpp", ".cc", ".c", ".h", ".hpp",
+    ".cs", ".go", ".rs", ".rb", ".php", ".swift", ".kt", ".scala", ".r", ".sql",
+    ".sh", ".bash", ".ps1", ".bat", ".cmd",
+    ".json", ".jsonl", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".env", ".xml", ".html", ".htm", ".css", ".svg",
 }
+
 COPY_SUFFIX_RE = re.compile(r"(\s*\(\d+\)|\s*-\s*copy)$", re.IGNORECASE)
-DOC_IMAGE_HINT_RE = re.compile(r"(?i)(screenshot|snip|whatsapp|scan|receipt|bill|challan|doc|page)")
 
 _OCR_ENGINE = None
 
 
 def _get_ocr_engine():
-    """Lazy-loads RapidOCR once per process only if a scanned PDF or document image is encountered."""
+    """Lazy-loads RapidOCR once per process when a scanned PDF or raster image is encountered."""
     global _OCR_ENGINE
     if _OCR_ENGINE is None:
         from rapidocr_onnxruntime import RapidOCR
@@ -94,22 +102,36 @@ def detect_exact_duplicates(records: List[FileRecord]) -> Dict[str, List[FileRec
     return duplicate_groups
 
 
-def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 1500) -> Tuple[str, str]:
+def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 2000) -> Tuple[str, str]:
     """
-    3-Tier Extraction Cascade:
-    1. Skip pure binaries/archives/media (0 ms).
-    2. Extract native digital text from PDF, DOCX, XLSX, PPTX, Markdown, Code.
-    3. Trigger RapidOCR ONLY when a PDF has <30 chars of selectable text or an image looks like a document/screenshot.
-    Returns: (extracted_text, extraction_status)
+    Purpose-First 3-Tier Extraction Cascade:
+    1. Tag temp/partial downloads and skip pure binaries/archives/audio-video (0 ms).
+    2. Extract native digital text from PDF, DOCX, XLSX, PPTX, Jupyter Notebooks, Parquet, Markdown, Data, and Code.
+    3. Trigger RapidOCR on scanned PDFs (<30 chars selectable text) AND all raster images so document photos/screenshots
+       are classified by purpose rather than raw image extension.
     """
     ext = path.suffix.lower()
+    if ext in TEMP_EXTENSIONS:
+        return "", "TEMP_PARTIAL"
     if ext in BINARY_SKIP_EXTENSIONS:
         return "", "SKIPPED_BINARY"
 
     try:
-        if ext in {".txt", ".md", ".csv", ".py", ".js", ".ts", ".json", ".yaml", ".yml", ".html", ".sql"}:
+        if path.stat().st_size == 0:
+            return "", "EMPTY_FILE"
+
+        if ext == ".ipynb":
+            raw = json.loads(path.read_text(encoding="utf-8", errors="ignore"))
+            parts = []
+            for cell in raw.get("cells", [])[:25]:
+                src = "".join(cell.get("source", []))
+                if src.strip():
+                    parts.append(src.strip())
+            return "\n".join(parts)[:max_chars], "NATIVE_TEXT"
+
+        if ext in PLAIN_TEXT_EXTENSIONS:
             text = path.read_text(encoding="utf-8", errors="ignore").strip()
-            return text[:max_chars], "NATIVE_TEXT"
+            return text[:max_chars], "NATIVE_TEXT" if text else "EMPTY_FILE"
 
         if ext == ".pdf":
             import pymupdf
@@ -117,7 +139,7 @@ def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 
                 if doc.needs_pass:
                     return "", "PASSWORD_PROTECTED"
                 text = ""
-                for page in doc[:2]:
+                for page in doc[:3]:
                     text += page.get_text("text") + "\n"
                     if len(text) >= max_chars:
                         break
@@ -125,7 +147,6 @@ def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 
                 if len(clean_text) >= 30:
                     return clean_text[:max_chars], "NATIVE_TEXT"
 
-                # Conditional OCR fallback for scanned PDFs
                 if use_ocr and len(doc) > 0:
                     ocr_parts = []
                     for page in doc[:2]:
@@ -141,19 +162,19 @@ def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 
         if ext == ".docx":
             import docx
             doc = docx.Document(path)
-            parts = [p.text for p in doc.paragraphs[:30] if p.text.strip()]
-            for table in doc.tables[:2]:
-                for row in table.rows[:10]:
+            parts = [p.text for p in doc.paragraphs[:40] if p.text.strip()]
+            for table in doc.tables[:3]:
+                for row in table.rows[:12]:
                     parts.append(" ".join(c.text.strip() for c in row.cells if c.text.strip()))
             return "\n".join(parts)[:max_chars], "NATIVE_TEXT"
 
         if ext == ".xlsx":
             import openpyxl
             wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
-            parts = []
-            for sheet in wb.sheetnames[:2]:
+            parts = [f"Sheets: {', '.join(wb.sheetnames)}"]
+            for sheet in wb.sheetnames[:3]:
                 ws = wb[sheet]
-                for row in ws.iter_rows(max_row=20, values_only=True):
+                for row in ws.iter_rows(max_row=25, values_only=True):
                     row_text = " ".join(str(v) for v in row if v is not None)
                     if row_text.strip():
                         parts.append(row_text)
@@ -164,17 +185,25 @@ def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 
             from pptx import Presentation
             prs = Presentation(path)
             parts = []
-            for slide in prs.slides[:5]:
+            for slide in prs.slides[:6]:
                 for shape in slide.shapes:
                     if hasattr(shape, "text") and shape.text.strip():
                         parts.append(shape.text.strip())
             return "\n".join(parts)[:max_chars], "NATIVE_TEXT"
 
-        if ext in {".png", ".jpg", ".jpeg", ".webp"}:
-            if use_ocr and DOC_IMAGE_HINT_RE.search(path.stem):
+        if ext == ".parquet":
+            import pandas as pd
+            df = pd.read_parquet(path)
+            header = "Columns: " + ", ".join(str(c) for c in df.columns)
+            sample = df.head(10).to_string(index=False)
+            return f"{header}\n{sample}"[:max_chars], "NATIVE_TEXT"
+
+        if ext in {".png", ".jpg", ".jpeg", ".webp", ".bmp"}:
+            if use_ocr:
                 ocr_text = _run_ocr_on_image_bytes(path.read_bytes()).strip()
                 if ocr_text:
                     return ocr_text[:max_chars], "OCR_USED"
+                return "", "OCR_EMPTY_IMAGE"
             return "", "SKIPPED_IMAGE_NON_DOC"
 
     except Exception:
@@ -186,7 +215,7 @@ def extract_document_content(path: Path, use_ocr: bool = True, max_chars: int = 
 def scan_directory(target_dir: Path, extract_text: bool = True, use_ocr: bool = True) -> List[FileRecord]:
     records: List[FileRecord] = []
     for item in sorted(target_dir.iterdir()):
-        if item.is_dir() or item.suffix.lower() in TEMP_EXTENSIONS or item.name.startswith("."):
+        if item.is_dir() or item.name.startswith("."):
             continue
         stat = item.stat()
         text, status = ("", "NOT_EXTRACTED")
