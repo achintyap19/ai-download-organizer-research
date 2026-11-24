@@ -1,0 +1,147 @@
+{
+  "filename_ablation": {
+    "raw_stems": {
+      "n": 85,
+      "overall_acc": 87.06,
+      "auto_move_acc": 95.31,
+      "auto_moved": 64,
+      "review_pct": 24.71,
+      "unflagged_wrong": 3,
+      "macro_f1": 86.9
+    },
+    "artifact_scrubbed_stems": {
+      "n": 85,
+      "overall_acc": 90.59,
+      "auto_move_acc": 96.97,
+      "auto_moved": 66,
+      "review_pct": 22.35,
+      "unflagged_wrong": 2,
+      "macro_f1": 90.49
+    },
+    "low_filename_weight": {
+      "n": 85,
+      "overall_acc": 88.24,
+      "auto_move_acc": 96.83,
+      "auto_moved": 63,
+      "review_pct": 25.88,
+      "unflagged_wrong": 2,
+      "macro_f1": 86.52
+    },
+    "zero_filename_features": {
+      "n": 85,
+      "overall_acc": 88.24,
+      "auto_move_acc": 95.24,
+      "auto_moved": 63,
+      "review_pct": 25.88,
+      "unflagged_wrong": 3,
+      "macro_f1": 84.71
+    },
+    "zero_body_features": {
+      "n": 85,
+      "overall_acc": 83.53,
+      "auto_move_acc": 91.53,
+      "auto_moved": 59,
+      "review_pct": 30.59,
+      "unflagged_wrong": 5,
+      "macro_f1": 86.58
+    }
+  },
+  "leave_one_source_out": {
+    "sandbox_synthetic": {
+      "n": 62,
+      "overall_acc": 58.06,
+      "auto_move_acc": 64.44,
+      "auto_moved": 45,
+      "review_pct": 27.42,
+      "unflagged_wrong": 16,
+      "macro_f1": 51.99
+    },
+    "github.com": {
+      "n": 37,
+      "overall_acc": 32.43,
+      "auto_move_acc": 60.0,
+      "auto_moved": 20,
+      "review_pct": 45.95,
+      "unflagged_wrong": 8,
+      "macro_f1": 22.01
+    },
+    "downloads_untouched": {
+      "n": 26,
+      "overall_acc": 65.38,
+      "auto_move_acc": 73.33,
+      "auto_moved": 15,
+      "review_pct": 42.31,
+      "unflagged_wrong": 4,
+      "macro_f1": 57.14
+    },
+    "pypi.org": {
+      "n": 22,
+      "overall_acc": 0.0,
+      "auto_move_acc": 0.0,
+      "auto_moved": 0,
+      "review_pct": 100.0,
+      "unflagged_wrong": 0,
+      "macro_f1": 0.0
+    },
+    "seaborn_data": {
+      "n": 21,
+      "overall_acc": 100.0,
+      "auto_move_acc": 100.0,
+      "auto_moved": 21,
+      "review_pct": 0.0,
+      "unflagged_wrong": 0,
+      "macro_f1": 100.0
+    },
+    "arxiv.org": {
+      "n": 20,
+      "overall_acc": 0.0,
+      "auto_move_acc": 0.0,
+      "auto_moved": 0,
+      "review_pct": 100.0,
+      "unflagged_wrong": 0,
+      "macro_f1": 0.0
+    },
+    "irs.gov": {
+      "n": 19,
+      "overall_acc": 0.0,
+      "auto_move_acc": 0.0,
+      "auto_moved": 17,
+      "review_pct": 10.53,
+      "unflagged_wrong": 17,
+      "macro_f1": 0.0
+    },
+    "wikimedia.org": {
+      "n": 6,
+      "overall_acc": 33.33,
+      "auto_move_acc": 0.0,
+      "auto_moved": 0,
+      "review_pct": 100.0,
+      "unflagged_wrong": 0,
+      "macro_f1": 25.0
+    }
+  },
+  "cv_selected_params": {
+    "preset": "uniform_unweighted",
+    "weights": {
+      "ext_ohe": 1.0,
+      "stem_word_tfidf": 1.0,
+      "stem_char_tfidf": 1.0,
+      "body_word_tfidf": 1.0,
+      "body_lsa_svd": 1.0,
+      "structural_stats": 1.0
+    },
+    "confidence_threshold": 0.45,
+    "ambiguity_margin": 0.08,
+    "train_oof_auto_move_acc": 97.86,
+    "train_oof_review_pct": 6.04
+  },
+  "single_locked_blind_result": {
+    "n": 85,
+    "overall_acc": 90.59,
+    "auto_move_acc": 93.75,
+    "auto_moved": 80,
+    "review_pct": 5.88,
+    "unflagged_wrong": 5,
+    "macro_f1": 89.35
+  }
+}

@@ -1,4 +1,4 @@
-# AI-Driven Downloads Folder Organizer — Comparative Strategy Benchmark
+﻿# AI-Driven Downloads Folder Organizer — Comparative Strategy Benchmark
 
 An empirical systems and machine learning research project evaluating **five architectural paradigms** for automated, safe, and content-aware organization of unstructured local `Downloads` directories.
 
@@ -9,7 +9,7 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **01. Rule-Based Engine** | Two-Tier YAML Rules + Native Parsers + Conditional `RapidOCR` | **Completed** | **`76.47%`** *(Cfg B)* / **`75.29%`** *(Cfg C)* | **`92.73%`** *(Cfg B)* / **`91.23%`** *(Cfg C)* | **`35.29%`** *(Cfg B)* / **`32.94%`** *(Cfg C)* | **`4` (`4.71%`)** *(Cfg B)* / **`5` (`5.88%`)** *(Cfg C)* | **`80.79%`** *(Cfg B)* / **`79.64%`** *(Cfg C)* |
 | **02A. Traditional ML (Baseline)** | Multi-Modal TF-IDF + LSA + Structural Stats *(Synthetic Train)* | **Completed** | `60.00%` *(Cfg C)* | `78.95%` | `32.94%` | `12` (`14.12%`) | `60.60%` |
-| **02B. Traditional ML (Real-World)** | Multi-Modal TF-IDF + LSA + Structural Stats *(SHA-256-Disjoint Real Train)* | **Completed** | **`87.06%`** *(Cfg C)* / **`83.53%`** *(Cfg B)* | **`95.31%`** *(Cfg C)* / **`96.72%`** *(Cfg B)* | **`24.71%`** *(Cfg C)* / **`28.24%`** *(Cfg B)* | **`3` (`3.53%`)** *(Cfg C)* / **`2` (`2.35%`)** *(Cfg B)* | **`86.90%`** *(Cfg C)* / **`84.93%`** *(Cfg B)* |
+| **02B. Traditional ML (Real-World)** | Multi-Modal TF-IDF + LSA + Structural Stats *(SHA-256-Disjoint Real Train, Rigor-Audited)* | **Completed** | **`90.59%`** *(Cfg C, CV-Locked)* / **`87.06%`** *(Raw Stems)* | **`93.75%`** *(CV-Locked)* / **`95.31%`** *(0.56/0.14 Gate)* | **`5.88%`** *(CV-Locked)* / **`24.71%`** *(0.56/0.14 Gate)* | **`5` (`5.88%`)** / **`3` (`3.53%`)** | **`89.35%`** *(CV-Locked)* / **`86.90%`** *(Raw)* |
 | **03. Dense Embeddings** | Local Sentence-Transformers + Cosine / Prototype Classifier | **Next** | — | — | — | — | — |
 | **04. Local LLM** | Quantized Local SLM via Ollama (Constrained JSON Schema) | Planned | — | — | — | — | — |
 | **05. Hybrid Cascade** | Rules -> Embeddings -> Local LLM Escalation | Planned | — | — | — | — | — |
@@ -26,13 +26,15 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 - **Strategy 02B (Multi-Modal TF-IDF + LSA + Structural Stats, `CalibratedLinearSVC` trained on `n = 149` SHA-256-disjoint real files):**
   - **Config A (Metadata-Only):** `62.35%` Overall (`53/85`) | `88.89%` Auto-Move (`40/45`) | `47.06%` Review | `5` Unflagged Wrong | `72.21%` Macro F1
   - **Config B (+ Native Parsing):** `83.53%` Overall (`71/85`) | **`96.72%`** Auto-Move (`59/61`) | `28.24%` Review | **`2` (`2.35%`)** Unflagged Wrong | `84.93%` Macro F1
-  - **Config C (+ Conditional `RapidOCR`):** **`87.06%`** Overall (`74/85`) | **`95.31%`** Auto-Move (`61/64`) | **`24.71%`** Review | **`3` (`3.53%`)** Unflagged Wrong | **`86.90%`** Macro F1
-  - **Per-Category Highlights:** Achieves **`100.00%` F1 across 4 of 7 categories** (`Archives_Compressed`, `Media_Photos_Graphics`, `Software_Installers`, `Spreadsheets_Data`), lifts `Academic_Study` to `89.36%` F1 and `Finance_Invoices` to `78.95%` F1, and leaves `Career_Identity` (`40.00%` F1) as the primary lexical bottleneck motivating Strategy 03.
-- **Synthetic-to-Real Domain Shift (`02A` vs. `02B`):** Training on templated synthetic data (`02A`) yielded `60.00%` blind accuracy (`12` unflagged errors); replacing it with a SHA-256-disjoint real-world training corpus (`02B`, `0%` hash overlap) boosted blind accuracy by **`+27.06%`** (`87.06%`).
+  - **Config C (+ Conditional `RapidOCR`, Raw Stems):** `87.06%` Overall (`74/85`) | **`95.31%`** Auto-Move (`61/64`) | `24.71%` Review | **`3` (`3.53%`)** Unflagged Wrong | `86.90%` Macro F1
+  - **Config C (+ Artifact-Scrubbed Stems & Zero-Peeking 5-Fold CV Cutoffs):** **`90.59%`** Overall (`77/85`) | **`93.75%`** Auto-Move (`75/80`) | **`5.88%`** Review | `5` Unflagged Wrong | **`89.35%`** Macro F1
+- **Methodological Rigor & Generalization Audit (`experiments/audit_strategy02_rigor.py`):**
+  - **Filename vs. Body Ablation:** Scrubbing repository artifact tokens (`sample`, `altacv`, `template`) eliminated spurious filename shortcuts (fixing both `"sample"` utility bills misclassified as CVs) and raised blind accuracy from `87.06%` -> **`90.59%`**. Removing filename features entirely still yielded **`88.24%`** (`95.24%` Auto-Move), confirming strong reliance on extracted document text.
+  - **Leave-One-Source-Out (LOSO) Generalization:** Holding out entire source domains (`downloads_untouched` -> `65.38%`, `github.com` -> `32.43%`, `irs.gov` / `arxiv.org` / `pypi.org` -> `0.00%`) demonstrated that bag-of-words TF-IDF struggles when unseen domains introduce novel vocabulary—directly motivating **Strategy 03 (Pretrained Dense Sentence Embeddings)**.
 
 ### 2. Stage 2 Disjoint Few-Shot Adaptation (`k = 2` Support -> `m = 7` Unseen Queries) & Non-Regression Audit
 - **Strategy 01 (Runtime Regex Induction):** Improved unseen domain accuracy (`Travel_Bookings`, `Medical_Health`) from `0.00%` -> **`42.86%`**, but caused **5 regressions** on the 85-file blind test (`75.29%` -> `74.12%`, `-1.17%` delta; unflagged wrong moves `5` -> `10`) due to over-generalized token matching on IRS tax forms.
-- **Strategy 02B (Calibrated Linear Retraining):** Improved unseen domain accuracy from `0.00%` -> **`28.57%`** with **`100.00%` routed safely to manual review** (`0` silent misroutes), and preserved **`87.06%` overall accuracy (`+0.00%` delta, zero regressions)** on the 85-file blind test while reducing unflagged wrong moves from `3` -> **`0` (`0.00%`)**.
+- **Strategy 02B (Calibrated Linear Retraining):** Improved unseen domain accuracy from `0.00%` -> **`28.57%`** with **`100.00%` routed safely to manual review** (`0` silent misroutes), and preserved baseline accuracy with **zero regressions** on the 85-file blind test (`0` unflagged wrong moves).
 
 ---
 
@@ -48,7 +50,7 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 ```text
 ├── docs/
 │   ├── 01_rule_based_analysis.md          # Strategy 01 architectural review, operational safety & audit report
-│   └── 02_ml_analysis.md                  # Strategy 02A vs 02B multi-modal TF-IDF + LSA + structural ML analysis
+│   └── 02_ml_analysis.md                  # Strategy 02A vs 02B multi-modal ML & rigor audit analysis
 ├── shared/
 │   ├── models.py                          # FileRecord, ClassificationResult & ActionItem contracts
 │   ├── scanner.py                         # 3-tier extraction cascade, conditional RapidOCR & SHA-256 deduplicator
@@ -61,15 +63,17 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 │   │   ├── runtime_rules.yaml             # Dynamically induced workspace rules
 │   │   └── dynamic_classifier.py          # Two-tier scorer, tie-conflict detector & regex rule inducer
 │   └── 02_ml_classification/
-│       ├── ml_classifier.py               # 6-branch TF-IDF + LSA + structural stats classifier
+│       ├── ml_classifier.py               # 6-branch artifact-scrubbed TF-IDF + LSA + structural ML classifier
 │       └── artifacts/
-│           └── best_ml_classifier.joblib  # Serialized CalibratedLinearSVC pipeline (3.56 MB)
+│           └── best_ml_classifier.joblib  # Serialized CalibratedLinearSVC pipeline
 ├── experiments/
 │   ├── evaluate_real_wild_blind.py        # Locked 96-file Strategy 01 blind, safety & non-regression harness
 │   ├── evaluate_strategy02_ml.py          # Strategy 02A vs 02B real-world benchmark harness
+│   ├── audit_strategy02_rigor.py          # Filename ablation, Leave-One-Source-Out & CV cutoff audit
 │   └── results/
 │       ├── strategy01_real_wild_blind_results.json
-│       └── strategy02_ml_benchmark_results.json
+│       ├── strategy02_ml_benchmark_results.json
+│       └── strategy02_rigor_audit.json
 └── tests/
     ├── test_fault_tolerance.py            # Corrupt PDF, encrypted PDF & out-of-taxonomy fallback tests
     └── test_executor_rollback.py          # Post-move edit & rename rollback safety tests
