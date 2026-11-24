@@ -1,0 +1,734 @@
+{
+  "strategy_02a_synthetic_corpus_baseline": {
+    "n_train": 218,
+    "blind_test_config_c": {
+      "n": 85,
+      "correct": 51,
+      "accuracy_pct": 60.0,
+      "auto_moved_count": 57,
+      "auto_moved_correct": 45,
+      "auto_move_accuracy_pct": 78.95,
+      "review_queue_count": 28,
+      "review_queue_pct": 32.94,
+      "unflagged_wrong_moves": 12,
+      "unflagged_wrong_move_pct": 14.12,
+      "flagged_wrong_moves": 22,
+      "macro_precision_pct": 68.71,
+      "macro_recall_pct": 66.52,
+      "macro_f1_pct": 64.17,
+      "per_class": {
+        "Academic_Study": {
+          "support": 23,
+          "precision": 42.86,
+          "recall": 26.09,
+          "f1": 32.43
+        },
+        "Archives_Compressed": {
+          "support": 8,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Career_Identity": {
+          "support": 10,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "Finance_Invoices": {
+          "support": 17,
+          "precision": 38.1,
+          "recall": 94.12,
+          "f1": 54.24
+        },
+        "Media_Photos_Graphics": {
+          "support": 5,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Software_Installers": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 45.45,
+          "f1": 62.5
+        },
+        "Spreadsheets_Data": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        }
+      },
+      "infer_time_ms": 840.1
+    }
+  },
+  "strategy_02b_real_disjoint_corpus": {
+    "n_train": 149,
+    "sha256_overlap_with_blind_test": 0,
+    "training_class_counts": {
+      "Academic_Study": 37,
+      "Archives_Compressed": 12,
+      "Career_Identity": 18,
+      "Finance_Invoices": 22,
+      "Media_Photos_Graphics": 11,
+      "Software_Installers": 29,
+      "Spreadsheets_Data": 20
+    },
+    "five_fold_cv_model_selection": {
+      "calibrated_linearsvc": {
+        "cv_mean_accuracy_pct": 95.33,
+        "cv_std_accuracy_pct": 3.4,
+        "cv_mean_macro_f1_pct": 92.61,
+        "cv_std_macro_f1_pct": 5.78,
+        "mean_fit_time_ms": 213.5,
+        "mean_infer_time_ms": 234.46
+      },
+      "logistic_regression": {
+        "cv_mean_accuracy_pct": 94.64,
+        "cv_std_accuracy_pct": 4.51,
+        "cv_mean_macro_f1_pct": 92.47,
+        "cv_std_macro_f1_pct": 6.16,
+        "mean_fit_time_ms": 535.3,
+        "mean_infer_time_ms": 199.73
+      },
+      "multinomial_nb": {
+        "cv_mean_accuracy_pct": 91.27,
+        "cv_std_accuracy_pct": 5.01,
+        "cv_mean_macro_f1_pct": 87.78,
+        "cv_std_macro_f1_pct": 7.33,
+        "mean_fit_time_ms": 157.0,
+        "mean_infer_time_ms": 176.17
+      },
+      "random_forest": {
+        "cv_mean_accuracy_pct": 90.64,
+        "cv_std_accuracy_pct": 6.09,
+        "cv_mean_macro_f1_pct": 86.21,
+        "cv_std_macro_f1_pct": 10.09,
+        "mean_fit_time_ms": 576.3,
+        "mean_infer_time_ms": 2065.68
+      },
+      "soft_voting_ensemble": {
+        "cv_mean_accuracy_pct": 93.98,
+        "cv_std_accuracy_pct": 3.25,
+        "cv_mean_macro_f1_pct": 91.21,
+        "cv_std_macro_f1_pct": 5.69,
+        "mean_fit_time_ms": 768.2,
+        "mean_infer_time_ms": 450.45
+      }
+    },
+    "selected_model": "calibrated_linearsvc",
+    "full_fit_time_ms": 409.5,
+    "serialized_model_size_kb": 3564.3,
+    "top_discriminative_features": {
+      "Academic_Study": [
+        [
+          "body_lsa_svd:comp_4",
+          0.404
+        ],
+        [
+          "ext_ohe:x0_.pptx",
+          0.346
+        ],
+        [
+          "ext_ohe:x0_.docx",
+          0.331
+        ],
+        [
+          "ext_ohe:x0_.txt",
+          0.279
+        ],
+        [
+          "body_lsa_svd:comp_2",
+          0.182
+        ],
+        [
+          "stem_word_tfidf:decoder diagram",
+          0.164
+        ]
+      ],
+      "Archives_Compressed": [
+        [
+          "structural_stats:x10",
+          0.389
+        ],
+        [
+          "ext_ohe:x0_.zip",
+          0.31
+        ],
+        [
+          "ext_ohe:x0_.gz",
+          0.274
+        ],
+        [
+          "structural_stats:x7",
+          0.18
+        ],
+        [
+          "stem_word_tfidf:tar",
+          0.07
+        ],
+        [
+          "stem_word_tfidf:24",
+          0.027
+        ]
+      ],
+      "Career_Identity": [
+        [
+          "stem_word_tfidf:cv",
+          0.232
+        ],
+        [
+          "ext_ohe:x0_.pdf",
+          0.231
+        ],
+        [
+          "stem_word_tfidf:sample",
+          0.221
+        ],
+        [
+          "body_lsa_svd:comp_9",
+          0.221
+        ],
+        [
+          "stem_word_tfidf:altacv",
+          0.18
+        ],
+        [
+          "ext_ohe:x0_.jpeg",
+          0.167
+        ]
+      ],
+      "Finance_Invoices": [
+        [
+          "body_lsa_svd:comp_1",
+          0.3
+        ],
+        [
+          "ext_ohe:x0_.pdf",
+          0.213
+        ],
+        [
+          "structural_stats:x3",
+          0.209
+        ],
+        [
+          "body_lsa_svd:comp_5",
+          0.179
+        ],
+        [
+          "structural_stats:x6",
+          0.179
+        ],
+        [
+          "stem_word_tfidf:fw4",
+          0.13
+        ]
+      ],
+      "Media_Photos_Graphics": [
+        [
+          "structural_stats:x9",
+          0.334
+        ],
+        [
+          "ext_ohe:x0_.mkv",
+          0.251
+        ],
+        [
+          "ext_ohe:x0_.mp4",
+          0.237
+        ],
+        [
+          "ext_ohe:x0_.png",
+          0.193
+        ],
+        [
+          "ext_ohe:x0_.jpg",
+          0.177
+        ],
+        [
+          "stem_word_tfidf:instruction",
+          0.136
+        ]
+      ],
+      "Software_Installers": [
+        [
+          "structural_stats:x11",
+          0.48
+        ],
+        [
+          "ext_ohe:x0_.whl",
+          0.307
+        ],
+        [
+          "ext_ohe:x0_.exe",
+          0.285
+        ],
+        [
+          "ext_ohe:x0_.msi",
+          0.129
+        ],
+        [
+          "structural_stats:x7",
+          0.054
+        ],
+        [
+          "stem_word_tfidf:x64",
+          0.034
+        ]
+      ],
+      "Spreadsheets_Data": [
+        [
+          "ext_ohe:x0_.csv",
+          0.359
+        ],
+        [
+          "structural_stats:x12",
+          0.297
+        ],
+        [
+          "structural_stats:x2",
+          0.133
+        ],
+        [
+          "ext_ohe:x0_.xlsx",
+          0.087
+        ],
+        [
+          "body_lsa_svd:comp_8",
+          0.058
+        ],
+        [
+          "stem_word_tfidf:list",
+          0.051
+        ]
+      ]
+    },
+    "stage1_real_wild_blind_ablation": [
+      {
+        "n": 85,
+        "correct": 53,
+        "accuracy_pct": 62.35,
+        "auto_moved_count": 45,
+        "auto_moved_correct": 40,
+        "auto_move_accuracy_pct": 88.89,
+        "review_queue_count": 40,
+        "review_queue_pct": 47.06,
+        "unflagged_wrong_moves": 5,
+        "unflagged_wrong_move_pct": 5.88,
+        "flagged_wrong_moves": 27,
+        "macro_precision_pct": 85.44,
+        "macro_recall_pct": 76.25,
+        "macro_f1_pct": 72.21,
+        "per_class": {
+          "Academic_Study": {
+            "support": 23,
+            "precision": 75.0,
+            "recall": 26.09,
+            "f1": 38.71
+          },
+          "Archives_Compressed": {
+            "support": 8,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Career_Identity": {
+            "support": 10,
+            "precision": 23.08,
+            "recall": 90.0,
+            "f1": 36.73
+          },
+          "Finance_Invoices": {
+            "support": 17,
+            "precision": 100.0,
+            "recall": 17.65,
+            "f1": 30.0
+          },
+          "Media_Photos_Graphics": {
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Software_Installers": {
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Spreadsheets_Data": {
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "infer_time_ms": 835.2,
+        "config": "Config A: Metadata-Only",
+        "scan_time_ms": 11.3
+      },
+      {
+        "n": 85,
+        "correct": 71,
+        "accuracy_pct": 83.53,
+        "auto_moved_count": 61,
+        "auto_moved_correct": 59,
+        "auto_move_accuracy_pct": 96.72,
+        "review_queue_count": 24,
+        "review_queue_pct": 28.24,
+        "unflagged_wrong_moves": 2,
+        "unflagged_wrong_move_pct": 2.35,
+        "flagged_wrong_moves": 12,
+        "macro_precision_pct": 84.86,
+        "macro_recall_pct": 85.21,
+        "macro_f1_pct": 84.93,
+        "per_class": {
+          "Academic_Study": {
+            "support": 23,
+            "precision": 85.71,
+            "recall": 78.26,
+            "f1": 81.82
+          },
+          "Archives_Compressed": {
+            "support": 8,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Career_Identity": {
+            "support": 10,
+            "precision": 33.33,
+            "recall": 30.0,
+            "f1": 31.58
+          },
+          "Finance_Invoices": {
+            "support": 17,
+            "precision": 75.0,
+            "recall": 88.24,
+            "f1": 81.08
+          },
+          "Media_Photos_Graphics": {
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Software_Installers": {
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Spreadsheets_Data": {
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "infer_time_ms": 1016.24,
+        "config": "Config B: + Native Parsing",
+        "scan_time_ms": 799.4
+      },
+      {
+        "n": 85,
+        "correct": 74,
+        "accuracy_pct": 87.06,
+        "auto_moved_count": 64,
+        "auto_moved_correct": 61,
+        "auto_move_accuracy_pct": 95.31,
+        "review_queue_count": 21,
+        "review_queue_pct": 24.71,
+        "unflagged_wrong_moves": 3,
+        "unflagged_wrong_move_pct": 3.53,
+        "flagged_wrong_moves": 8,
+        "macro_precision_pct": 88.42,
+        "macro_recall_pct": 87.08,
+        "macro_f1_pct": 86.9,
+        "per_class": {
+          "Academic_Study": {
+            "support": 23,
+            "precision": 87.5,
+            "recall": 91.3,
+            "f1": 89.36
+          },
+          "Archives_Compressed": {
+            "support": 8,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Career_Identity": {
+            "support": 10,
+            "precision": 60.0,
+            "recall": 30.0,
+            "f1": 40.0
+          },
+          "Finance_Invoices": {
+            "support": 17,
+            "precision": 71.43,
+            "recall": 88.24,
+            "f1": 78.95
+          },
+          "Media_Photos_Graphics": {
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Software_Installers": {
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "Spreadsheets_Data": {
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "infer_time_ms": 1022.17,
+        "config": "Config C: + Conditional RapidOCR",
+        "scan_time_ms": 36623.1
+      }
+    ],
+    "stage1_config_c_misclassifications": [
+      {
+        "filename": "_Achintya_Pathak_Unpaid Internship_Offer_Letter_20261110.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Career_Identity",
+        "predicted": "Academic_Study",
+        "confidence": 0.5567,
+        "conflict_with": null,
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "Achintya_Pathak_CV.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Career_Identity",
+        "predicted": "Academic_Study",
+        "confidence": 0.4303,
+        "conflict_with": "Career_Identity",
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "AchintyaEIS (1).pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Career_Identity",
+        "predicted": "Finance_Invoices",
+        "confidence": 0.5355,
+        "conflict_with": null,
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "Examination Admit Card.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Career_Identity",
+        "predicted": "Finance_Invoices",
+        "confidence": 0.4026,
+        "conflict_with": "Academic_Study",
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "Hari Arora AM3.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Academic_Study",
+        "predicted": "Finance_Invoices",
+        "confidence": 0.4221,
+        "conflict_with": "Academic_Study",
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "hj.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Academic_Study",
+        "predicted": "Finance_Invoices",
+        "confidence": 0.8112,
+        "conflict_with": null,
+        "needs_review": false,
+        "extraction_status": "OCR_USED"
+      },
+      {
+        "filename": "offer letter.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Career_Identity",
+        "predicted": "Finance_Invoices",
+        "confidence": 0.5318,
+        "conflict_with": null,
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "pge sample utility bill.pdf",
+        "source_domain": "pge.com",
+        "true_category": "Finance_Invoices",
+        "predicted": "Career_Identity",
+        "confidence": 0.4924,
+        "conflict_with": null,
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "solar-choice-bill-sample.pdf",
+        "source_domain": "public_sample",
+        "true_category": "Finance_Invoices",
+        "predicted": "Career_Identity",
+        "confidence": 0.5813,
+        "conflict_with": null,
+        "needs_review": false,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "sourabh_bajaj_resume.pdf",
+        "source_domain": "github.com",
+        "true_category": "Career_Identity",
+        "predicted": "Academic_Study",
+        "confidence": 0.5363,
+        "conflict_with": null,
+        "needs_review": true,
+        "extraction_status": "NATIVE_TEXT"
+      },
+      {
+        "filename": "uttarpradesh.amity-DGMST-2025A2345924002IJANUARY.pdf",
+        "source_domain": "downloads_untouched",
+        "true_category": "Career_Identity",
+        "predicted": "Finance_Invoices",
+        "confidence": 0.6408,
+        "conflict_with": null,
+        "needs_review": false,
+        "extraction_status": "NATIVE_TEXT"
+      }
+    ],
+    "stage2_unseen_domain_adaptation": {
+      "before_retraining": {
+        "n": 7,
+        "correct": 0,
+        "accuracy_pct": 0.0,
+        "auto_moved_count": 2,
+        "auto_moved_correct": 0,
+        "auto_move_accuracy_pct": 0.0,
+        "review_queue_count": 5,
+        "review_queue_pct": 71.43,
+        "unflagged_wrong_moves": 2,
+        "unflagged_wrong_move_pct": 28.57,
+        "flagged_wrong_moves": 5,
+        "macro_precision_pct": 0.0,
+        "macro_recall_pct": 0.0,
+        "macro_f1_pct": 0.0,
+        "per_class": {
+          "Medical_Health": {
+            "support": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "Travel_Bookings": {
+            "support": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        }
+      },
+      "after_k2_retraining": {
+        "n": 7,
+        "correct": 2,
+        "accuracy_pct": 28.57,
+        "auto_moved_count": 0,
+        "auto_moved_correct": 0,
+        "auto_move_accuracy_pct": 0.0,
+        "review_queue_count": 7,
+        "review_queue_pct": 100.0,
+        "unflagged_wrong_moves": 0,
+        "unflagged_wrong_move_pct": 0.0,
+        "flagged_wrong_moves": 5,
+        "macro_precision_pct": 50.0,
+        "macro_recall_pct": 25.0,
+        "macro_f1_pct": 33.33,
+        "per_class": {
+          "Medical_Health": {
+            "support": 4,
+            "precision": 100.0,
+            "recall": 50.0,
+            "f1": 66.67
+          },
+          "Travel_Bookings": {
+            "support": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        }
+      }
+    },
+    "post_retraining_85file_non_regression": {
+      "n": 85,
+      "correct": 74,
+      "accuracy_pct": 87.06,
+      "auto_moved_count": 57,
+      "auto_moved_correct": 57,
+      "auto_move_accuracy_pct": 100.0,
+      "review_queue_count": 28,
+      "review_queue_pct": 32.94,
+      "unflagged_wrong_moves": 0,
+      "unflagged_wrong_move_pct": 0.0,
+      "flagged_wrong_moves": 11,
+      "macro_precision_pct": 89.29,
+      "macro_recall_pct": 87.88,
+      "macro_f1_pct": 87.99,
+      "per_class": {
+        "Academic_Study": {
+          "support": 23,
+          "precision": 86.96,
+          "recall": 86.96,
+          "f1": 86.96
+        },
+        "Archives_Compressed": {
+          "support": 8,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Career_Identity": {
+          "support": 10,
+          "precision": 66.67,
+          "recall": 40.0,
+          "f1": 50.0
+        },
+        "Finance_Invoices": {
+          "support": 17,
+          "precision": 71.43,
+          "recall": 88.24,
+          "f1": 78.95
+        },
+        "Media_Photos_Graphics": {
+          "support": 5,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Software_Installers": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Spreadsheets_Data": {
+          "support": 11,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        }
+      },
+      "infer_time_ms": 952.18
+    }
+  }
+}
