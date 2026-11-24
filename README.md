@@ -10,8 +10,7 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 | **01. Rule-Based Engine** | Two-Tier YAML Rules + Native Parsers + Conditional `RapidOCR` | **Completed** | **`76.47%`** *(Cfg B)* / **`75.29%`** *(Cfg C)* | **`92.73%`** *(Cfg B)* / **`91.23%`** *(Cfg C)* | **`35.29%`** *(Cfg B)* / **`32.94%`** *(Cfg C)* | **`4` (`4.71%`)** *(Cfg B)* / **`5` (`5.88%`)** *(Cfg C)* | **`80.79%`** *(Cfg B)* / **`79.64%`** *(Cfg C)* |
 | **02A. Traditional ML (Baseline)** | Multi-Modal TF-IDF + LSA + Structural Stats *(Synthetic Train)* | **Completed** | `60.00%` *(Cfg C)* | `78.95%` | `32.94%` | `12` (`14.12%`) | `60.60%` |
 | **02B. Traditional ML (Real-World)** | Multi-Modal TF-IDF + LSA + Structural Stats *(SHA-256-Disjoint Real Train, Rigor-Audited)* | **Completed** | **`90.59%`** *(Cfg C, CV-Locked)* / **`87.06%`** *(Raw Stems)* | **`93.75%`** *(CV-Locked)* / **`95.31%`** *(0.56/0.14 Gate)* | **`5.88%`** *(CV-Locked)* / **`24.71%`** *(0.56/0.14 Gate)* | **`5` (`5.88%`)** / **`3` (`3.53%`)** | **`89.35%`** *(CV-Locked)* / **`86.90%`** *(Raw)* |
-| **02C. Purpose-First ML (14-Cat)** | 7-Branch Multi-Modal TF-IDF + Purpose-Gated Ext + Soft-Voting (	est_set_v1, 
-=590) | **Completed** (586dcc7) | **66.3%** *(Strict)* / **81.2%** *(Lenient)* | **86.7%** (496 moved) | **15.9%** | **66 (11.2%)** | **67.5%** *(14-cat)* |
+| **02C. Purpose-First ML (14-Cat)** | 7-Branch Multi-Modal TF-IDF + Purpose-Gated Ext + Soft-Voting (`test_set_v1`, `n=590`) | **Completed** (`586dcc7`) | **`66.3%`** *(Strict)* / **`81.2%`** *(Lenient)* | **`86.7%`** (`496` moved) | **`15.9%`** | **`66` (`11.2%`)** | **`67.5%`** *(14-cat)* | **Completed** (586dcc7) | **66.3%** *(Strict)* / **81.2%** *(Lenient)* | **86.7%** (496 moved) | **15.9%** | **66 (11.2%)** | **67.5%** *(14-cat)* |
 | **03. Dense Embeddings** | Local Sentence-Transformers + Cosine / Prototype Classifier | **Next** | — | — | — | — | — |
 | **04. Local LLM** | Quantized Local SLM via Ollama (Constrained JSON Schema) | Planned | — | — | — | — | — |
 | **05. Hybrid Cascade** | Rules -> Embeddings -> Local LLM Escalation | Planned | — | — | — | — | — |
@@ -43,12 +42,17 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 
 ---
 
-## 12-Persona External Blind Benchmark (datasets/test_set_v1, 
- = 590 Unique Files, 14-Category Taxonomy)
+## 12-Persona External Blind Benchmark (`datasets/test_set_v1`, `n = 590` Unique Files, 14-Category Taxonomy)
 Evaluated strictly as a black-box benchmark (zero test-set inspection; all training sets verified SHA-256-disjoint):
 
 | Model | Scoring Mode | Strict Acc | Lenient Acc (95% CI) | Auto-Move Acc | Review Queue | Unflagged Wrong | Macro F1 |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Strategy 02B** (`best_ml_classifier.joblib`) | `--legacy` (7-cat) | `58.1%` | `58.1%` (`54.1?62.1%`) | `44.0%` (`291`) | `50.7%` | `163` (`27.6%`) | `46.3%` *(8 buckets)* |
+| **Strategy 02C** (`ml_classifier_14cat_v2.joblib`, `586dcc7`) | **Native 14-cat** | **`66.3%`** | **`81.2%`** (`77.8?84.1%`) | **`86.7%`** (`496`) | **`15.9%`** | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
+
+See [`docs/02c_purpose_first_ml_analysis.md`](docs/02c_purpose_first_ml_analysis.md) for the full group, source, flag, and error breakdown motivating **Strategy 03 (Multilingual Dense Embeddings)**.
+
+--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Strategy 02B** (est_ml_classifier.joblib) | --legacy (7-cat) | 58.1% | 58.1% (54.1–62.1%) | 44.0% (291) | 50.7% | 163 (27.6%) | 46.3% *(8 buckets)* |
 | **Strategy 02C** (ml_classifier_14cat_v2.joblib, 586dcc7) | **Native 14-cat** | **66.3%** | **81.2%** (77.8–84.1%) | **86.7%** (496) | **15.9%** | **66 (11.2%)** | **67.5%** *(14 cats)* |
 
