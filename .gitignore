@@ -10,3 +10,11 @@ datasets/sandbox_raw/
 datasets/unseen_base_200/
 datasets/unseen_stream_20/
 strategies/01_rule_based/runtime_rules.yaml
+datasets/locked_blind_test/  
+datasets/test_set_v1/
+
+# Local dataset caches & macOS archive artifacts
+datasets/__MACOSX/
+datasets/train_14cat_corpus.pkl
+datasets/ml_train_real/
+datasets/real_wild_downloads/

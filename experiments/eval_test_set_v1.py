@@ -44,7 +44,9 @@ def main() -> None:
     out_csv.parent.mkdir(parents=True, exist_ok=True)
 
     if args.strategy == "02c":
-        from ml_classifier_v2 import PurposeFirstMLClassifier
+        import __main__
+        from ml_classifier_v2 import PurposeFieldExtractor, PurposeFirstMLClassifier
+        __main__.PurposeFieldExtractor = PurposeFieldExtractor
         model_path = REPO_ROOT / "strategies/02_ml_classification/artifacts/ml_classifier_14cat_v2.joblib"
         clf = PurposeFirstMLClassifier.load(model_path)
     elif args.strategy == "02":
