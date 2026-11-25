@@ -5,15 +5,15 @@ An empirical systems and machine learning research project evaluating **five arc
 ## Research Objective
 Compare deterministic, statistical, semantic, and generative classification pipelines on a **locked, non-templated real-world ground-truth corpus** (`N = 96` unique files deduplicated by SHA-256: `n = 85` blind test files across 7 core domains + `n = 11` disjoint files for $k=2$ few-shot adaptation) across **Overall Accuracy**, **Auto-Move Accuracy**, **Manual Review Queue %**, **Unflagged Wrong Moves**, **Macro F1**, and **Latency**.
 
-| Strategy | Paradigm | Status | Overall Acc (`n=85`) | Auto-Move Acc | Review Queue | Unflagged Wrong | Macro F1 |
+| Strategy | Paradigm | Status | Local Real (`n=85`, 7-Cat) | External `test_set_v1` (`n=590`) | Auto-Move Acc (`test_set_v1`) | Unflagged Wrong (`test_set_v1`) | Macro F1 (`test_set_v1`) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **01. Rule-Based Engine** | Two-Tier YAML Rules + Native Parsers + Conditional `RapidOCR` | **Completed** | **`76.47%`** *(Cfg B)* / **`75.29%`** *(Cfg C)* | **`92.73%`** *(Cfg B)* / **`91.23%`** *(Cfg C)* | **`35.29%`** *(Cfg B)* / **`32.94%`** *(Cfg C)* | **`4` (`4.71%`)** *(Cfg B)* / **`5` (`5.88%`)** *(Cfg C)* | **`80.79%`** *(Cfg B)* / **`79.64%`** *(Cfg C)* |
-| **02A. Traditional ML (Baseline)** | Multi-Modal TF-IDF + LSA + Structural Stats *(Synthetic Train)* | **Completed** | `60.00%` *(Cfg C)* | `78.95%` | `32.94%` | `12` (`14.12%`) | `60.60%` |
-| **02B. Traditional ML (Real-World)** | Multi-Modal TF-IDF + LSA + Structural Stats *(SHA-256-Disjoint Real Train, Rigor-Audited)* | **Completed** | **`90.59%`** *(Cfg C, CV-Locked)* / **`87.06%`** *(Raw Stems)* | **`93.75%`** *(CV-Locked)* / **`95.31%`** *(0.56/0.14 Gate)* | **`5.88%`** *(CV-Locked)* / **`24.71%`** *(0.56/0.14 Gate)* | **`5` (`5.88%`)** / **`3` (`3.53%`)** | **`89.35%`** *(CV-Locked)* / **`86.90%`** *(Raw)* |
-| **02C. Purpose-First ML (14-Cat)** | 7-Branch Multi-Modal TF-IDF + Purpose-Gated Ext + Soft-Voting (`test_set_v1`, `n=590`) | **Completed** (`586dcc7`) | **`66.3%`** *(Strict)* / **`81.2%`** *(Lenient)* | **`86.7%`** (`496` moved) | **`15.9%`** | **`66` (`11.2%`)** | **`67.5%`** *(14-cat)* | **Completed** (586dcc7) | **66.3%** *(Strict)* / **81.2%** *(Lenient)* | **86.7%** (496 moved) | **15.9%** | **66 (11.2%)** | **67.5%** *(14-cat)* |
-| **03. Dense Embeddings** | Local Sentence-Transformers + Cosine / Prototype Classifier | **Next** | — | — | — | — | — |
-| **04. Local LLM** | Quantized Local SLM via Ollama (Constrained JSON Schema) | Planned | — | — | — | — | — |
-| **05. Hybrid Cascade** | Rules -> Embeddings -> Local LLM Escalation | Planned | — | — | — | — | — |
+| **01. Rule-Based Engine** (`96366b3`) | Two-Tier YAML Rules + Native Parsers + `RapidOCR` | **Completed** | `76.47%` *(Cfg B)* / `75.29%` *(Cfg C)* | **`60.0%`** *(`--legacy` 7-cat)* | `50.8%` (`321` moved) | `158` (`26.8%`) | `50.1%` *(8 buckets)* |
+| **02A. Traditional ML (Baseline)** | Multi-Modal TF-IDF + LSA + Stats *(Synthetic Train)* | **Completed** | `60.00%` *(Cfg C)* | ? | ? | ? | ? |
+| **02B. Traditional ML (7-Cat)** | Multi-Modal TF-IDF + LSA + Stats *(Real Train, Rigor-Audited)* | **Completed** | **`90.59%`** *(CV-Locked)* | **`58.1%`** *(`--legacy` 7-cat)* | `44.0%` (`291` moved) | `163` (`27.6%`) | `46.3%` *(8 buckets)* |
+| **02C. Purpose-First ML (14-Cat)** (`586dcc7`) | 7-Branch Multi-Modal TF-IDF + Purpose-Gated Ext + Soft-Voting | **Completed** | ? *(14-cat native)* | **`66.3%` Strict / `81.2%` Lenient** | **`86.7%`** (`496` moved) | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
+| **03. Dense Embeddings** | Multilingual Sentence-Transformers + Prototype Classifier | **Next** | ? | ? | ? | ? | ? |
+| **04. Local LLM** | Quantized Local SLM via Ollama (Constrained JSON Schema) | Planned | ? | ? | ? | ? | ? |
+| **05. Hybrid Cascade** | Rules -> Embeddings -> Local LLM Escalation | Planned | ? | ? | ? | ? | ? |
 
 ---
 
@@ -47,17 +47,12 @@ Evaluated strictly as a black-box benchmark (zero test-set inspection; all train
 
 | Model | Scoring Mode | Strict Acc | Lenient Acc (95% CI) | Auto-Move Acc | Review Queue | Unflagged Wrong | Macro F1 |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Strategy 01** (`DynamicRuleClassifier`, `96366b3`) | `--legacy` (7-cat) | `60.0%` | `60.0%` (`56.0?63.9%`) | `50.8%` (`321`) | `45.6%` | `158` (`26.8%`) | `50.1%` *(8 buckets)* |
-| **Strategy 02B** (`best_ml_classifier.joblib`) | `--legacy` (7-cat) | `58.1%` | `58.1%` (`54.1?62.1%`) | `44.0%` (`291`) | `50.7%` | `163` (`27.6%`) | `46.3%` *(8 buckets)* |
-| **Strategy 02C** (`ml_classifier_14cat_v2.joblib`, `586dcc7`) | **Native 14-cat** | **`66.3%`** | **`81.2%`** (`77.8?84.1%`) | **`86.7%`** (`496`) | **`15.9%`** | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
+| **Strategy 01** (`DynamicRuleClassifier`, `96366b3`) | `--legacy` (7-cat) | `60.0%` | `60.0%` (`56.0-63.9%`) | `50.8%` (`321`) | `45.6%` | `158` (`26.8%`) | `50.1%` *(8 buckets)* |
+| **Strategy 02B** (`best_ml_classifier.joblib`) | `--legacy` (7-cat) | `58.1%` | `58.1%` (`54.1-62.1%`) | `44.0%` (`291`) | `50.7%` | `163` (`27.6%`) | `46.3%` *(8 buckets)* |
+| **Strategy 02C** (`ml_classifier_14cat_v2.joblib`, `586dcc7`) | **Native 14-cat** | **`66.3%`** | **`81.2%`** (`77.8-84.1%`) | **`86.7%`** (`496`) | **`15.9%`** | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
 
-See [`docs/02c_purpose_first_ml_analysis.md`](docs/02c_purpose_first_ml_analysis.md) for the full group, source, flag, and error breakdown motivating **Strategy 03 (Multilingual Dense Embeddings)**.
+See [`docs/01_rule_based_analysis.md`](docs/01_rule_based_analysis.md) and [`docs/02c_purpose_first_ml_analysis.md`](docs/02c_purpose_first_ml_analysis.md) for the full group, source, flag, and error breakdowns motivating **Strategy 03 (Multilingual Dense Embeddings)**.
 
---- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Strategy 02B** (est_ml_classifier.joblib) | --legacy (7-cat) | 58.1% | 58.1% (54.1–62.1%) | 44.0% (291) | 50.7% | 163 (27.6%) | 46.3% *(8 buckets)* |
-| **Strategy 02C** (ml_classifier_14cat_v2.joblib, 586dcc7) | **Native 14-cat** | **66.3%** | **81.2%** (77.8–84.1%) | **86.7%** (496) | **15.9%** | **66 (11.2%)** | **67.5%** *(14 cats)* |
-
-See [docs/02c_purpose_first_ml_analysis.md](docs/02c_purpose_first_ml_analysis.md) for the full group, source, flag, and error breakdown motivating **Strategy 03 (Multilingual Dense Embeddings)**.
 ---
 
 ## Key Architectural Highlights
