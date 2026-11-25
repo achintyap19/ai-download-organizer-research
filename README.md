@@ -8,12 +8,12 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 | Strategy | Paradigm | Status | Local Real (`n=85`, 7-Cat) | External `test_set_v1` (`n=590`) | Auto-Move Acc (`test_set_v1`) | Unflagged Wrong (`test_set_v1`) | Macro F1 (`test_set_v1`) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **01. Rule-Based Engine** (`96366b3`) | Two-Tier YAML Rules + Native Parsers + `RapidOCR` | **Completed** | `76.47%` *(Cfg B)* / `75.29%` *(Cfg C)* | **`60.0%`** *(`--legacy` 7-cat)* | `50.8%` (`321` moved) | `158` (`26.8%`) | `50.1%` *(8 buckets)* |
-| **02A. Traditional ML (Baseline)** | Multi-Modal TF-IDF + LSA + Stats *(Synthetic Train)* | **Completed** | `60.00%` *(Cfg C)* | ? | ? | ? | ? |
+| **02A. Traditional ML (Baseline)** | Multi-Modal TF-IDF + LSA + Stats *(Synthetic Train)* | **Completed** | `60.00%` *(Cfg C)* | - | ? | - | ? |
 | **02B. Traditional ML (7-Cat)** | Multi-Modal TF-IDF + LSA + Stats *(Real Train, Rigor-Audited)* | **Completed** | **`90.59%`** *(CV-Locked)* | **`58.1%`** *(`--legacy` 7-cat)* | `44.0%` (`291` moved) | `163` (`27.6%`) | `46.3%` *(8 buckets)* |
-| **02C. Purpose-First ML (14-Cat)** (`586dcc7`) | 7-Branch Multi-Modal TF-IDF + Purpose-Gated Ext + Soft-Voting | **Completed** | ? *(14-cat native)* | **`66.3%` Strict / `81.2%` Lenient** | **`86.7%`** (`496` moved) | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
-| **03. Dense Embeddings** | Multilingual Sentence-Transformers + Prototype Classifier | **Next** | ? | ? | ? | ? | ? |
-| **04. Local LLM** | Quantized Local SLM via Ollama (Constrained JSON Schema) | Planned | ? | ? | ? | ? | ? |
-| **05. Hybrid Cascade** | Rules -> Embeddings -> Local LLM Escalation | Planned | ? | ? | ? | ? | ? |
+| **02C. Purpose-First ML (14-Cat)** (`586dcc7`) | 7-Branch Multi-Modal TF-IDF + Purpose-Gated Ext + Soft-Voting | **Completed** | - *(14-cat native)* | **`66.3%` Strict / `81.2%` Lenient** | **`86.7%`** (`496` moved) | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
+| **03. Dense Embeddings** | Multilingual Sentence-Transformers + Prototype Classifier | **Next** | - | ? | - | ? | - |
+| **04. Local LLM** | Quantized Local SLM via Ollama (Constrained JSON Schema) | Planned | - | ? | - | ? | - |
+| **05. Hybrid Cascade** | Rules -> Embeddings -> Local LLM Escalation | Planned | - | ? | - | ? | - |
 
 ---
 
@@ -36,9 +36,6 @@ Compare deterministic, statistical, semantic, and generative classification pipe
 ### 2. Stage 2 Disjoint Few-Shot Adaptation (`k = 2` Support -> `m = 7` Unseen Queries) & Non-Regression Audit
 - **Strategy 01 (Runtime Regex Induction):** Improved unseen domain accuracy (`Travel_Bookings`, `Medical_Health`) from `0.00%` -> **`42.86%`**, but caused **5 regressions** on the 85-file blind test (`75.29%` -> `74.12%`, `-1.17%` delta; unflagged wrong moves `5` -> `10`) due to over-generalized token matching on IRS tax forms.
 - **Strategy 02B (Calibrated Linear Retraining):** Improved unseen domain accuracy from `0.00%` -> **`28.57%`** with **`100.00%` routed safely to manual review** (`0` silent misroutes), and preserved baseline accuracy with **zero regressions** on the 85-file blind test (`0` unflagged wrong moves).
-
----
-
 
 ---
 
