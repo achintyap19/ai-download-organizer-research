@@ -106,3 +106,23 @@ Inspecting the blind misclassifications and non-regression audit reveals six con
 4. **OCR Latency & Noisy-Token Sensitivity (`1` error + `37×` slowdown):** Invoking `RapidOCR` on scanned PDFs increased scan latency from `1.00 s` to `38.73 s` and caused a noisy OCR token in `hj.pdf` to trigger a false `Finance_Invoices` match (dropping Config C accuracy by `1.18%` below Config B).
 5. **Post-Adaptation Lexical False-Positive Drift (`5` regressions):** High-priority runtime regex rules induced from $k=2$ files lack global IDF calibration, causing generic tokens in `rt_medical_health_001` to hijack previously flagged IRS tax forms and textbooks into unflagged wrong moves.
 6. **Lexical Sparsity in $k = 2$ Few-Shot Induction:** Exact token intersection (`min_doc_freq = 2`) across $k = 2$ support files struggles across heterogeneous formats (visa itinerary vs. domestic e-ticket), motivating **TF-IDF statistical weighting (Strategy 02)**, **dense semantic embeddings (Strategy 03)**, and **multimodal LLM escalation (Strategies 04–05)**.
+
+
+---
+
+## 12-Persona External Blind Benchmark (`datasets/test_set_v1`, `n = 590` Unique Files, Commit `96366b3`)
+
+Evaluating `DynamicRuleClassifier` (`seed_rules.yaml` + `runtime_rules.yaml`) on `datasets/test_set_v1` (`score.py --legacy`):
+
+| Metric | Value | Notes |
+| :--- | :---: | :--- |
+| **Overall Accuracy (Strict / Lenient)** | **`60.0%`** *(95% CI: `56.0?63.9%`)* | Documents: `66.5%` (`n=394`), Images: `44.9%` (`n=158`), Format-only: `55.3%` (`n=38`) |
+| **Auto-Move Precision** | **`50.8%`** (`321` auto-moved) | `158` unflagged wrong auto-moves (`26.8%`), `45.6%` routed to review |
+| **Macro-F1 (`--legacy`, 8 buckets)** | **`50.1%`** | `NO_LEGACY_EQUIVALENT` (`n=219`, `37.1%`) has `0.0%` recall under closed 7-cat rules |
+| **Real Downloads (`n = 76`)** | **`65.8%`** | `73.7%` auto-move precision (`10` unflagged wrong) |
+| **Real Photos (`n = 41`)** | **`75.6%`** | `100.0%` auto-move precision (`0` unflagged wrong) |
+
+### Key Bottlenecks Observed
+1. **Closed 7-Category Ceiling (`219` `NO_LEGACY_EQUIVALENT` files):** `37.1%` of `test_set_v1` falls outside the legacy 7-category taxonomy (`Work_Professional`, `Home_Household`, `Personal_IDs_Records`, `Travel`, `Health_Medical`, `Other`), causing closed-world misclassifications into `Finance_Invoices` (`16`) and `Academic_Study` (`9`).
+2. **Legacy Category Naming Mismatch:** Rules predicting `Media_Screenshots` (`25` on photos, `18` on finance receipts) and `Media_Audio_Video` (`10`) were scored as misses under `--legacy`.
+3. **Uninformative & Mixed-Language Filenames:** Accuracy dropped to `50.4%` on uninformative names (`n=228`) and `34.5%` on mixed-language files (`n=29`), confirming why **Strategy 02C** (`81.2%` lenient) and **Strategy 03 (Multilingual Dense Embeddings)** are necessary.

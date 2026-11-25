@@ -47,6 +47,7 @@ Evaluated strictly as a black-box benchmark (zero test-set inspection; all train
 
 | Model | Scoring Mode | Strict Acc | Lenient Acc (95% CI) | Auto-Move Acc | Review Queue | Unflagged Wrong | Macro F1 |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Strategy 01** (`DynamicRuleClassifier`, `96366b3`) | `--legacy` (7-cat) | `60.0%` | `60.0%` (`56.0?63.9%`) | `50.8%` (`321`) | `45.6%` | `158` (`26.8%`) | `50.1%` *(8 buckets)* |
 | **Strategy 02B** (`best_ml_classifier.joblib`) | `--legacy` (7-cat) | `58.1%` | `58.1%` (`54.1?62.1%`) | `44.0%` (`291`) | `50.7%` | `163` (`27.6%`) | `46.3%` *(8 buckets)* |
 | **Strategy 02C** (`ml_classifier_14cat_v2.joblib`, `586dcc7`) | **Native 14-cat** | **`66.3%`** | **`81.2%`** (`77.8?84.1%`) | **`86.7%`** (`496`) | **`15.9%`** | **`66` (`11.2%`)** | **`67.5%`** *(14 cats)* |
 
