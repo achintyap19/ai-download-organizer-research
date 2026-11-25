@@ -54,9 +54,10 @@ def main() -> None:
         model_path = REPO_ROOT / "strategies/02_ml_classification/artifacts/best_ml_classifier.joblib"
         clf = TraditionalMLClassifier.load(model_path)
     else:
-        from rule_classifier import RuleBasedClassifier
-        rules_path = REPO_ROOT / "strategies/01_rule_based/rules.yaml"
-        clf = RuleBasedClassifier(rules_path)
+        from dynamic_classifier import DynamicRuleClassifier
+        seed_path = REPO_ROOT / "strategies/01_rule_based/seed_rules.yaml"
+        runtime_path = REPO_ROOT / "strategies/01_rule_based/runtime_rules.yaml"
+        clf = DynamicRuleClassifier(seed_rules_path=seed_path, runtime_rules_path=runtime_path)
 
     rows = []
     t0 = time.perf_counter()
